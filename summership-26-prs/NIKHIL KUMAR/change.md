@@ -29,21 +29,13 @@
 
 ---
 
-## Design Decision 3: Dynamic 3-Stage Mission Objective Banner
+## Design Decision 3: Streamlined Minimalist UI over Redundant Guidance Banners
 
-**Problem:** Learners frequently felt lost when faced with multiple interactive elements on screen (clickable code lines, pre-flight prediction, Run button, memory table). They would try to click "Run Program" before understanding the code or answering the hypothesis test.
+**Problem:** Adding auxiliary mission banners inside the Code Execution panel occupied precious vertical screen space and competed with the code block and live heap inspector for learner attention.
 
-**Thinking:** Learners need clear, sequential micro-goals that adapt dynamically as they progress through each stage of the lab. A static instruction block feels like documentation; a reactive mission banner feels like an intelligent copilot.
+**Thinking:** Cognitive load theory suggests that extraneous UI chrome degrades focus during deep technical tasks. The Pre-Flight Hypothesis Card already dictates the pedagogical checkpoint, and the disabled state of the "Run Program" button natively enforces the order of operations without needing duplicate banner text.
 
-**Decision:** Implemented a dynamic **Mission Objective Banner** inside the Code Execution panel across all levels:
-- **State 1 (Exploration & Prediction):** Shows a 3-step checklist:
-  - Step 1: 🔍 **Understand the code** (indicates lines can be clicked; turns to `✓ 1.` once a line is inspected).
-  - Step 2: 📝 **Give the Pre-Flight test** (active focus).
-  - Step 3: ⏳ **Run the program** (locked state).
-- **State 2 (Post-Test Ready to Run):** Immediately updates upon correct prediction:
-  - Badge changes to `Step 3 Unlocked 🔓`.
-  - Mission text changes to: `✅ Pre-Flight Test Completed! Now click "▶ Run Program" on the right panel to execute the code and witness physical RAM allocation!`
-- **State 3 (Post-Crash Guidance):** Directs the user to examine the RAM allocation table and click `"View the Smart/Better Approach"` to proceed to the optimization phase.
+**Decision:** Removed redundant mission headers from all levels. The code execution panel presents a clean, uncluttered layout: directly pairing the Pre-Flight prediction challenge with the clickable code inspector, reducing visual noise and maximizing focus on the simulation.
 
 ---
 

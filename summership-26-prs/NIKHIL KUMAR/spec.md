@@ -55,23 +55,7 @@ Presents the contextual dilemma before entering the simulation lab:
 
 ---
 
-### 3.2 Dynamic Mission Objective Banner
-Positioned prominently inside the Code Execution panel across Levels 1, 2, 3, and 4:
-- **Phase 1 (Pre-Flight Active):**
-  - **Step 1:** 🔍 **Understand the code**: Interactive prompt to click code lines and inspect physical RAM consequences.
-  - **Step 2:** 📝 **Give the Pre-Flight test**: Prompt to answer the intuition hypothesis question below.
-  - **Step 3:** ⏳ **Run the program**: Locked state until Step 2 is cleared.
-- **Phase 2 (Post-Test Ready to Run):**
-  - Immediately triggered once the learner selects the correct prediction.
-  - Automatically hides the pre-flight test box to eliminate cognitive visual clutter.
-  - Updates title to `🚀 Mission: Ready to Run` with badge `Step 3 Unlocked 🔓`.
-  - Dynamically guides the learner to click **"▶ Run Program"** on the right panel.
-- **Phase 3 (Post-Crash Guidance):**
-  - Upon system crash in naive mode, shifts focus to clicking `"View the Smart/Better Approach"` to transition to the optimized reference pattern.
-
----
-
-### 3.3 Pre-Flight Hypothesis Prediction Card
+### 3.2 Pre-Flight Hypothesis Prediction Card
 Forces active cognitive retrieval before running code:
 - **Behavior:**
   - Presents a concrete question: *"Before running code: What will happen in RAM when 1,000 students call copy.deepcopy()?"*
@@ -83,7 +67,7 @@ Forces active cognitive retrieval before running code:
 
 ---
 
-### 3.4 Interactive Code Line Inspector & 4-Step RAM Cards
+### 3.3 Interactive Code Line Inspector & 4-Step RAM Cards
 Clicking any line in the Python code snippet reveals its exact physical execution breakdown across 4 distinct steps:
 1. **1. Code (Python Execution):** What the Python interpreter executes at this line.
 2. **2. RAM (In Physical RAM):** Physical memory address binding, pointer creation, or heap block allocation.
@@ -92,7 +76,7 @@ Clicking any line in the Python code snippet reveals its exact physical executio
 
 ---
 
-### 3.5 Real-Time RAM Allocation Lab & Memory Box Tracker
+### 3.4 Real-Time RAM Allocation Lab & Memory Box Tracker
 The right-hand panel visualizes hardware memory consumption:
 - **Live RAM Gauge (`RamBar`):** Real-time percentage indicator transitioning from Blue (<60%) to Amber (60-80%) to Flashing Red (>80%).
 - **Visual Memory Floor:**
@@ -104,7 +88,7 @@ The right-hand panel visualizes hardware memory consumption:
 
 ---
 
-### 3.6 Post-Simulation Assessment Engine (`Quiz.jsx`)
+### 3.5 Post-Simulation Assessment Engine (`Quiz.jsx`)
 Triggered via the **"Check Knowledge"** button after passing the optimized simulation:
 - **Question Types:**
   1. **MCQs:** Conceptual reasoning questions with instant feedback.
@@ -113,7 +97,7 @@ Triggered via the **"Check Knowledge"** button after passing the optimized simul
 
 ---
 
-### 3.7 🧩 "Fix the Bug" Code Slot Challenge (`CodeSlotChallenge.jsx`)
+### 3.6 🧩 "Fix the Bug" Code Slot Challenge (`CodeSlotChallenge.jsx`)
 Unlocked immediately after scoring 100% on the 3-question quiz:
 - **Pedagogical Rationale:** Active coding retrieval; learners do not just observe optimized code—they physically patch the buggy snippet.
 - **Workflow:**
@@ -124,7 +108,7 @@ Unlocked immediately after scoring 100% on the 3-question quiz:
 
 ---
 
-### 3.8 Synthesized Web Audio API (`audio.js`)
+### 3.7 Synthesized Web Audio API (`audio.js`)
 Zero external `.mp3` or `.wav` dependencies; all sound effects are generated mathematically using HTML5 `AudioContext`:
 - `playPop()`: Clean frequency ramp (400 Hz $\rightarrow$ 800 Hz) for UI button clicks.
 - `playThud()`: Low-frequency sine thump (120 Hz $\rightarrow$ 40 Hz) when heavy memory allocations occur.
