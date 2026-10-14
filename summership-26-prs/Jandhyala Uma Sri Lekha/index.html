@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PyBe — Did You Notice? | Birbal and the Royal Reward</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Outfit:wght@400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header / Navbar -->
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="logo-badge">PyBe</span>
+        <span class="module-title">Birbal and the Royal Reward</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="step-counter" id="stepCounter">Scene 1 of 4</div>
+    </header>
+
+    <!-- Main Content Stage -->
+    <main class="stage-container" id="stageContainer">
+
+      <!-- STEP 1: Interactive Graphic Storybook — Scene 1: The Royal Challenge -->
+      <section class="step-card active" data-step="1">
+        <div class="scene-tag">Graphic Novel — Scene 1 of 4</div>
+        <h2 class="scene-heading">The Royal Challenge</h2>
+
+        <div class="graphic-story-page">
+          <div class="graphic-novel-frame">
+            <img src="images/scene1_graphic_novel.jpg" alt="Scene 1: The Royal Challenge - Emperor Akbar addresses gathered workers at dawn in the royal court" class="graphic-novel-img" />
+          </div>
+          <div class="editorial-caption-bar">
+            <p class="caption-text"><em>“The sun had just risen over Akbar's palace. Emperor Akbar gathers the workers to announce a challenge with a royal reward...”</em></p>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <div></div>
+          <button class="btn btn-primary" onclick="nextStep()">Continue Story →</button>
+        </div>
+      </section>
+
+      <!-- STEP 2: Story Scene 2 (Day) -->
+      <section class="step-card" data-step="2">
+        <div class="scene-tag">Graphic Novel — Scene 2 of 4</div>
+        <h2 class="scene-heading">The Day Passes</h2>
+
+        <div class="graphic-story-page">
+          <div class="graphic-novel-frame">
+            <img src="images/scene2_graphic_novel.jpg" alt="Scene 2: The Day Passes - Time progresses from morning to late afternoon as Birbal observes" class="graphic-novel-img" />
+          </div>
+          <div class="editorial-caption-bar">
+            <p class="caption-text"><em>“Morning turned to afternoon. The workers labored tirelessly while Birbal continuously observed the position of the sun...”</em></p>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Continue Story →</button>
+        </div>
+      </section>
+
+      <!-- STEP 3: Story Scene 3 (Sunset) -->
+      <section class="step-card" data-step="3">
+        <div class="scene-tag">Graphic Novel — Scene 3 of 4</div>
+        <h2 class="scene-heading">The First Worker</h2>
+
+        <div class="graphic-story-page">
+          <div class="graphic-novel-frame">
+            <img src="images/scene3_graphic_novel.jpg" alt="Scene 3: Worker 1 finishes before sunset and Akbar bestows gold reward" class="graphic-novel-img" />
+          </div>
+          <div class="editorial-caption-bar">
+            <p class="caption-text"><em>“Worker 1 approaches the throne having finished the task. As sunlight remains, Emperor Akbar bestows the gold reward.”</em></p>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Continue Story →</button>
+        </div>
+      </section>
+
+      <!-- STEP 4: Story Scene 4 (Twilight) -->
+      <section class="step-card" data-step="4">
+        <div class="scene-tag">Graphic Novel — Scene 4 of 4</div>
+        <h2 class="scene-heading">The Second Worker</h2>
+
+        <div class="graphic-story-page">
+          <div class="graphic-novel-frame">
+            <img src="images/scene4_graphic_novel.jpg" alt="Scene 4: Worker 2 finishes after sunset at twilight and receives no reward" class="graphic-novel-img" />
+          </div>
+          <div class="editorial-caption-bar">
+            <p class="caption-text"><em>“Worker 2 arrives as dusk falls. Birbal notes the darkened sky, and Akbar enforces the royal morning rule.”</em></p>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Did You Notice? →</button>
+        </div>
+      </section>
+
+      <!-- STEP 5 (Phase 2 - Step 1): Story to Reflection Transition -->
+      <section class="step-card" data-step="5">
+        <div class="scene-tag discovery-tag">The Story Ends</div>
+        <h2 class="scene-heading">The Story Ends</h2>
+        <div class="story-body">
+          <div class="transition-hero">
+            <div class="arch-crest">
+              <span class="crest-title">THE STORY ENDS</span>
+            </div>
+            <p class="hero-lead">Both workers completed the exact same task.</p>
+            <p class="hero-sub" style="font-size: 1.3rem; color: var(--accent-gold); font-family: 'Cinzel', Georgia, serif; font-weight: 700; margin: 12px 0;">But something was different.</p>
+            <p class="hero-sub">Step into the investigation to discover why one received gold while the other received none.</p>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back to Story</button>
+          <button class="btn btn-accent btn-lg" onclick="nextStep()">Did You Notice? →</button>
+        </div>
+      </section>
+
+      <!-- STEP 6 (Phase 2 - Step 2 & 3): Compare the Two Workers & Reveal Observation -->
+      <section class="step-card" data-step="6">
+        <div class="scene-tag discovery-tag">Reflection — Step 1 of 4</div>
+        <h2 class="scene-heading">Compare the Two Workers</h2>
+        <div class="story-body">
+          <div class="workers-comparison">
+            <div class="worker-card success-card">
+              <div class="worker-header">
+                <span class="worker-title">Worker 1</span>
+                <span class="status-pill success">Reward</span>
+              </div>
+              <p class="worker-detail">Finished before sunset</p>
+            </div>
+            <div class="worker-card danger-card">
+              <div class="worker-header">
+                <span class="worker-title">Worker 2</span>
+                <span class="status-pill danger">No reward</span>
+              </div>
+              <p class="worker-detail">Finished after sunset</p>
+            </div>
+          </div>
+
+          <div class="comparison-prompt">
+            <p class="prompt-lead">Both workers completed the same task.<br>But Akbar's response was different.</p>
+            <h3>What changed?</h3>
+            <div class="options-grid" id="optionsGridPhase2">
+              <button class="option-btn" onclick="checkAnswerPhase2(this, false)">A. The person doing the task</button>
+              <button class="option-btn" onclick="checkAnswerPhase2(this, true)">B. The time when the task was completed</button>
+              <button class="option-btn" onclick="checkAnswerPhase2(this, false)">C. The difficulty of the task</button>
+              <button class="option-btn" onclick="checkAnswerPhase2(this, false)">D. The task itself</button>
+            </div>
+          </div>
+
+          <!-- Reveal Observation -->
+          <div class="reveal-box hidden" id="revealBoxPhase2">
+            <div class="reveal-header">Exactly.</div>
+            <p>Birbal checked when the task was completed.</p>
+            
+            <div class="simple-rules">
+              <div class="rule-item">Before sunset → <strong>reward</strong></div>
+              <div class="rule-item">After sunset → <strong>no reward</strong></div>
+            </div>
+
+            <div class="condition-diagram">
+              <div class="diagram-title">Decision Map</div>
+              <div class="condition-node">Was it before sunset?</div>
+              <div class="branches">
+                <div class="branch yes-branch">
+                  <span class="branch-label">YES ➔</span>
+                  <span class="branch-action">Reward</span>
+                </div>
+                <div class="branch no-branch">
+                  <span class="branch-label">NO ➔</span>
+                  <span class="branch-action">No Reward</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="observation-summary">Birbal checked something first, and his action depended on the result.</p>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" id="btnStep6Next" disabled onclick="nextStep()">Continue to Pattern →</button>
+        </div>
+      </section>
+
+      <!-- STEP 7 (Phase 2 - Step 4): Visually Distinct "Did You Notice?" Card -->
+      <section class="step-card" data-step="7">
+        <div class="scene-tag discovery-tag">Notice — Step 2 of 4</div>
+        
+        <div class="did-you-notice-card">
+          <div class="dyn-header">
+            <span class="dyn-badge">DID YOU NOTICE?</span>
+          </div>
+
+          <p class="dyn-subtitle">Birbal's decision wasn't random.<br>He followed a simple pattern:</p>
+
+          <div class="pattern-sequence">
+            <div class="seq-step check">CHECK</div>
+            <div class="seq-arrow">➔</div>
+            <div class="seq-step decide">DECIDE</div>
+            <div class="seq-arrow">➔</div>
+            <div class="seq-step act">ACT</div>
+          </div>
+
+          <div class="pattern-breakdown">
+            <div class="breakdown-row">
+              <div class="badge-col check-col">CHECK:</div>
+              <div class="desc-col">"Was it before sunset?"</div>
+            </div>
+            <div class="breakdown-row">
+              <div class="badge-col decide-col">DECIDE:</div>
+              <div class="desc-col">"Should the reward be given?"</div>
+            </div>
+            <div class="breakdown-row">
+              <div class="badge-col act-col">ACT:</div>
+              <div class="desc-col">"Give the reward / Don't give the reward"</div>
+            </div>
+          </div>
+
+          <div class="dyn-footer-question">
+            <h3>Have you seen this pattern anywhere else?</h3>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Explore Everyday Examples →</button>
+        </div>
+      </section>
+
+      <!-- STEP 8 (Phase 2 - Step 5): Everyday Examples -->
+      <section class="step-card" data-step="8">
+        <div class="scene-tag discovery-tag">Generalize — Step 3 of 4</div>
+        <h2 class="scene-heading">Everyday Situations</h2>
+        <div class="story-body">
+          <p>Look at these three simple situations:</p>
+
+          <div class="everyday-grid">
+            <div class="everyday-card">
+              <div class="everyday-tag weather-tag">1. WEATHER</div>
+              <p class="situation-text">"It is raining outside."</p>
+              <div class="q-a">
+                <span class="q-label">What would you do?</span>
+                <span class="a-label">"Take an umbrella."</span>
+              </div>
+            </div>
+
+            <div class="everyday-card">
+              <div class="everyday-tag phone-tag">2. PHONE</div>
+              <p class="situation-text">"Your phone battery is at 5%."</p>
+              <div class="q-a">
+                <span class="q-label">What would you do?</span>
+                <span class="a-label">"Charge it."</span>
+              </div>
+            </div>
+
+            <div class="everyday-card">
+              <div class="everyday-tag exam-tag">3. EXAM</div>
+              <p class="situation-text">"Your mark is 72 and the passing mark is 50."</p>
+              <div class="q-a">
+                <span class="q-label">What happens?</span>
+                <span class="a-label">"Pass."</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Did You Notice Banner -->
+          <div class="did-you-notice-banner">
+            <div class="dyn-banner-title">DID YOU NOTICE?</div>
+            <p>These situations look different, but something is happening in all of them.</p>
+            <p class="highlight-banner-text">We check something first, and then decide what to do.</p>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Discover the Concept →</button>
+        </div>
+      </section>
+
+      <!-- STEP 9 (Phase 2 - Step 6): Concept Discovery ("Condition") -->
+      <section class="step-card" data-step="9">
+        <div class="scene-tag discovery-tag">Discover — Step 4 of 4</div>
+        <h2 class="scene-heading">The Core Concept</h2>
+        <div class="story-body">
+          <div class="concept-hero-box">
+            <div class="concept-badge-header">The pattern you discovered has a name.</div>
+            <div class="concept-definition-card">
+              <p class="def-quote">"A condition is something we check before making a decision."</p>
+            </div>
+          </div>
+
+          <div class="concept-mapping-table">
+            <div class="map-row map-header">
+              <span>Situation</span>
+              <span>Condition Checked</span>
+              <span>Decision / Action</span>
+            </div>
+            <div class="map-row">
+              <span class="situation-name">Birbal's Rule</span>
+              <span>Was task completed before sunset?</span>
+              <span>Reward / No reward</span>
+            </div>
+            <div class="map-row">
+              <span class="situation-name">Weather</span>
+              <span>Is it raining outside?</span>
+              <span>Take umbrella</span>
+            </div>
+            <div class="map-row">
+              <span class="situation-name">Phone Battery</span>
+              <span>Is battery at 5%?</span>
+              <span>Charge phone</span>
+            </div>
+            <div class="map-row">
+              <span class="situation-name">Exam Marks</span>
+              <span>Is mark >= 50?</span>
+              <span>Pass</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">What about a computer? →</button>
+        </div>
+      </section>
+
+      <!-- STEP 10 (Phase 3 - Step 1): Bridge -->
+      <section class="step-card" data-step="10">
+        <div class="scene-tag python-tag">Python Intro — Step 1 of 7</div>
+        <h2 class="scene-heading">WHAT ABOUT A COMPUTER?</h2>
+        <div class="story-body">
+          <div class="transition-hero">
+            <p class="hero-lead">Birbal could look at the situation and decide what to do.</p>
+            <p class="hero-sub">But a computer needs us to describe the decision clearly.</p>
+            <p class="hero-sub" style="color: var(--accent-gold); font-weight: 700; font-size: 1.2rem;">How could we tell a computer to follow the same rule?</p>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-accent btn-lg" onclick="nextStep()">Let's find out →</button>
+        </div>
+      </section>
+
+      <!-- STEP 11 (Phase 3 - Step 2): Recreate Birbal's Rule -->
+      <section class="step-card" data-step="11">
+        <div class="scene-tag python-tag">Python Intro — Step 2 of 7</div>
+        <h2 class="scene-heading">Recreating Birbal's Rule</h2>
+        <div class="story-body">
+          <div class="rule-recreation-card">
+            <div class="rule-title">Birbal's Rule</div>
+            
+            <div class="rule-flow">
+              <div class="flow-question">Was the task completed before sunset?</div>
+              <div class="flow-branches">
+                <div class="flow-branch yes">
+                  <span class="flow-pill green">YES ↓</span>
+                  <span class="flow-action">"Give the reward"</span>
+                </div>
+                <div class="flow-branch no">
+                  <span class="flow-pill red">NO ↓</span>
+                  <span class="flow-action">"No reward"</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="did-you-notice-banner">
+            <div class="dyn-banner-title">DID YOU NOTICE?</div>
+            <p>This is the same pattern we just discovered:</p>
+            <p class="highlight-banner-text">CHECK ➔ DECIDE ➔ ACT</p>
+          </div>
+
+          <p class="transition-prompt-text">Python has a way to express this pattern.</p>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">See How Python Does It →</button>
+        </div>
+      </section>
+
+      <!-- STEP 12 (Phase 3 - Step 3): Introduce IF -->
+      <section class="step-card" data-step="12">
+        <div class="scene-tag python-tag">Python Intro — Step 3 of 7</div>
+        <h2 class="scene-heading">Introducing "if"</h2>
+        <div class="story-body">
+          <div class="code-block syntax-block">
+            <pre><code><span class="kw">if</span> <span class="var">finished_before_sunset</span>:
+    <span class="func">print</span>(<span class="str">"Give the reward"</span>)</code></pre>
+          </div>
+
+          <div class="explanation-pill-box">
+            <span class="kw-badge">if</span> tells Python: <strong>Do this only when this is true.</strong>
+          </div>
+
+          <!-- Interactive Experiment with IF only -->
+          <div class="code-interactive-card">
+            <div class="code-header">
+              <span>Try Changing the Value:</span>
+              <div class="toggle-control">
+                <button class="toggle-btn active" id="ifOnlyTrueBtn" onclick="setIfOnlyCondition(true)">True</button>
+                <button class="toggle-btn" id="ifOnlyFalseBtn" onclick="setIfOnlyCondition(false)">False</button>
+              </div>
+            </div>
+            <div class="code-editor-sim">
+              <div class="code-line"><span class="var">finished_before_sunset</span> = <span class="val" id="ifOnlyVal">True</span></div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="kw">if</span> <span class="var">finished_before_sunset</span>:</div>
+              <div class="code-line">    <span class="func">print</span>(<span class="str">"Give the reward"</span>)</div>
+            </div>
+            <div class="code-output">
+              <span class="output-label">Python Output:</span>
+              <span class="output-text" id="ifOnlyOutput">"Give the reward"</span>
+            </div>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">What Happens Otherwise? →</button>
+        </div>
+      </section>
+
+      <!-- STEP 13 (Phase 3 - Step 4): Ask What Happens Otherwise & Introduce ELSE -->
+      <section class="step-card" data-step="13">
+        <div class="scene-tag python-tag">Python Intro — Step 4 of 7</div>
+        <h2 class="scene-heading">Introducing "else"</h2>
+        <div class="story-body">
+          <div class="question-lead-card">
+            <p>But what should happen when the condition is not true?</p>
+          </div>
+
+          <div class="code-block syntax-block">
+            <pre><code><span class="kw">if</span> <span class="var">finished_before_sunset</span>:
+    <span class="func">print</span>(<span class="str">"Give the reward"</span>)
+<span class="kw">else</span>:
+    <span class="func">print</span>(<span class="str">"No reward"</span>)</code></pre>
+          </div>
+
+          <div class="explanation-pill-box else-box">
+            <span class="kw-badge else-badge">else</span> tells Python: <strong>what to do when the condition isn't true.</strong>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Try Birbal's Rule →</button>
+        </div>
+      </section>
+
+      <!-- STEP 14 (Phase 3 - Step 5): Interactive Story Simulation -->
+      <section class="step-card" data-step="14">
+        <div class="scene-tag python-tag">Python Intro — Step 5 of 7</div>
+        <h2 class="scene-heading">Try Birbal's Rule</h2>
+        <div class="story-body">
+          <p>Select a scenario to test Birbal's rule in Python:</p>
+
+          <div class="scenario-selector">
+            <button class="scenario-btn active" id="scenarioABtn" onclick="setSimScenario(true)">
+              <span class="scen-title">Scenario A</span>
+              <span class="scen-desc">The worker finished before sunset.</span>
+            </button>
+            <button class="scenario-btn" id="scenarioBBtn" onclick="setSimScenario(false)">
+              <span class="scen-title">Scenario B</span>
+              <span class="scen-desc">The worker finished after sunset.</span>
+            </button>
+          </div>
+
+          <div class="code-interactive-card">
+            <div class="code-header">
+              <span>birbal_rule.py</span>
+              <span class="scenario-badge-indicator" id="simScenarioBadge">finished_before_sunset = True</span>
+            </div>
+            <div class="code-editor-sim">
+              <div class="code-line"><span class="var">finished_before_sunset</span> = <span class="val" id="simVal">True</span></div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="kw">if</span> <span class="var">finished_before_sunset</span>:</div>
+              <div class="code-line">    <span class="func">print</span>(<span class="str">"Give the reward"</span>)</div>
+              <div class="code-line"><span class="kw">else</span>:</div>
+              <div class="code-line">    <span class="func">print</span>(<span class="str">"No reward"</span>)</div>
+            </div>
+            <div class="code-output">
+              <span class="output-label">Program Output:</span>
+              <span class="output-text highlight" id="simOutput">"Give the reward"</span>
+            </div>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Reflect on the Pattern →</button>
+        </div>
+      </section>
+
+      <!-- STEP 15 (Phase 3 - Step 6): Did You Notice Reflection -->
+      <section class="step-card" data-step="15">
+        <div class="scene-tag discovery-tag">Python Intro — Step 6 of 7</div>
+        
+        <div class="did-you-notice-card">
+          <div class="dyn-header">
+            <span class="dyn-badge">DID YOU NOTICE?</span>
+          </div>
+
+          <p class="dyn-subtitle" style="font-size: 1.25rem; font-weight: 700; color: #2B2118;">
+            You changed only the condition.
+          </p>
+
+          <div class="reflection-glow-box">
+            <p class="reflection-main">The program changed its decision automatically.</p>
+          </div>
+
+          <p class="dyn-subtitle" style="color: #4A3B2E;">
+            That is what decision-making in a program allows us to do.
+          </p>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">See Story to Python Mapping →</button>
+        </div>
+      </section>
+
+      <!-- STEP 16 (Phase 3 - Step 7): Story to Python Mapping & Final Message -->
+      <section class="step-card" data-step="16">
+        <div class="scene-tag python-tag">Python Intro — Step 7 of 7</div>
+        <h2 class="scene-heading">Story to Python Mapping</h2>
+        <div class="story-body">
+          <div class="mapping-grid">
+            <div class="map-pair">
+              <div class="map-story">"Was it completed before sunset?"</div>
+              <div class="map-arrow">➔</div>
+              <div class="map-python"><code>finished_before_sunset</code></div>
+            </div>
+
+            <div class="map-pair">
+              <div class="map-story">"If the answer is yes"</div>
+              <div class="map-arrow">➔</div>
+              <div class="map-python"><code>if</code></div>
+            </div>
+
+            <div class="map-pair">
+              <div class="map-story">"Give the reward"</div>
+              <div class="map-arrow">➔</div>
+              <div class="map-python">first action</div>
+            </div>
+
+            <div class="map-pair">
+              <div class="map-story">"Otherwise"</div>
+              <div class="map-arrow">➔</div>
+              <div class="map-python"><code>else</code></div>
+            </div>
+
+            <div class="map-pair">
+              <div class="map-story">"No reward"</div>
+              <div class="map-arrow">➔</div>
+              <div class="map-python">second action</div>
+            </div>
+          </div>
+
+          <!-- Final Message Banner -->
+          <div class="did-you-notice-banner final-banner">
+            <div class="dyn-banner-title">You Discovered Python Decision Making</div>
+            <p class="final-quote">
+              "You didn't need to memorize the syntax first.<br>
+              You discovered what the program needed to do, and then saw how Python expresses it."
+            </p>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Try a Transfer Challenge →</button>
+        </div>
+      </section>
+
+      <!-- STEP 17 (Phase 4 - Step 1): New Situation -->
+      <section class="step-card" data-step="17">
+        <div class="scene-tag challenge-tag">Transfer Challenge — Step 1 of 6</div>
+        <h2 class="scene-heading">COLLEGE EVENT ID ENTRY</h2>
+        <div class="story-body">
+          <p class="hero-lead">You are helping manage entry to a college event.</p>
+          <p>Only students with a valid ID can enter the event.</p>
+
+          <div class="workers-comparison">
+            <div class="worker-card success-card">
+              <div class="worker-header">
+                <span class="worker-title">Student A</span>
+                <span class="status-pill success">Allowed to enter</span>
+              </div>
+              <p class="worker-detail">Has a valid ID</p>
+            </div>
+            <div class="worker-card danger-card">
+              <div class="worker-header">
+                <span class="worker-title">Student B</span>
+                <span class="status-pill danger">Entry denied</span>
+              </div>
+              <p class="worker-detail">Does not have a valid ID</p>
+            </div>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Did You Notice the Pattern? →</button>
+        </div>
+      </section>
+
+      <!-- STEP 18 (Phase 4 - Step 2): Recognize the Pattern -->
+      <section class="step-card" data-step="18">
+        <div class="scene-tag challenge-tag">Transfer Challenge — Step 2 of 6</div>
+        <h2 class="scene-heading">Recognize the Pattern</h2>
+        <div class="story-body">
+          <div class="did-you-notice-banner">
+            <div class="dyn-banner-title">DID YOU NOTICE?</div>
+            <p>This isn't Birbal's story anymore.</p>
+            <p class="highlight-banner-text">But did you use the same idea?</p>
+          </div>
+
+          <div class="comparison-prompt">
+            <h3>What are we checking before deciding whether the student can enter?</h3>
+            <div class="options-grid" id="optionsGridPhase4Step2">
+              <button class="option-btn" onclick="checkAnswerPhase4Step2(this, false)">A. Student's name</button>
+              <button class="option-btn" onclick="checkAnswerPhase4Step2(this, true)">B. Whether the student has a valid ID</button>
+              <button class="option-btn" onclick="checkAnswerPhase4Step2(this, false)">C. Student's department</button>
+              <button class="option-btn" onclick="checkAnswerPhase4Step2(this, false)">D. Event location</button>
+            </div>
+          </div>
+
+          <!-- Reveal Breakdown after Selection -->
+          <div class="reveal-box hidden" id="revealBoxPhase4Step2">
+            <div class="reveal-header">Exactly.</div>
+            <p>You recognized the condition being checked.</p>
+            
+            <div class="pattern-sequence" style="background: #EAE0CD; padding: 14px; margin: 12px 0;">
+              <div class="seq-step check">CHECK</div>
+              <div class="seq-arrow">➔</div>
+              <div class="seq-step decide">DECIDE</div>
+              <div class="seq-arrow">➔</div>
+              <div class="seq-step act">ACT</div>
+            </div>
+
+            <div class="pattern-breakdown">
+              <div class="breakdown-row">
+                <div class="badge-col check-col">CHECK:</div>
+                <div class="desc-col">"Does the student have a valid ID?"</div>
+              </div>
+              <div class="breakdown-row">
+                <div class="badge-col decide-col">DECIDE:</div>
+                <div class="desc-col">"Should the student be allowed to enter?"</div>
+              </div>
+              <div class="breakdown-row">
+                <div class="badge-col act-col">ACT:</div>
+                <div class="desc-col">"Allow entry / Deny entry"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" id="btnStep18Next" disabled onclick="nextStep()">Complete the Code →</button>
+        </div>
+      </section>
+
+      <!-- STEP 19 (Phase 4 - Step 3): Complete the Code -->
+      <section class="step-card" data-step="19">
+        <div class="scene-tag challenge-tag">Transfer Challenge — Step 3 of 6</div>
+        <h2 class="scene-heading">Complete the Code</h2>
+        <div class="story-body">
+          <p>We know the rule. Now let's express the same rule in Python.</p>
+
+          <div class="code-interactive-card">
+            <div class="code-header">
+              <span>entry_system.py</span>
+            </div>
+            <div class="code-editor-sim">
+              <div class="code-line"><span class="var">has_id</span> = <span class="val">True</span></div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="kw">if</span> <span class="blank-slot" id="blankSlot">______</span>:</div>
+              <div class="code-line">    <span class="func">print</span>(<span class="str">"Allow entry"</span>)</div>
+              <div class="code-line"><span class="kw">else</span>:</div>
+              <div class="code-line">    <span class="func">print</span>(<span class="str">"Entry denied"</span>)</div>
+            </div>
+          </div>
+
+          <div class="comparison-prompt">
+            <h3>Select the condition to check in Python:</h3>
+            <div class="options-grid" id="optionsGridPhase4Step3">
+              <button class="option-btn" onclick="checkAnswerPhase4Step3(this, true)">1. has_id</button>
+              <button class="option-btn" onclick="checkAnswerPhase4Step3(this, false)">2. "Allow entry"</button>
+              <button class="option-btn" onclick="checkAnswerPhase4Step3(this, false)">3. False</button>
+              <button class="option-btn" onclick="checkAnswerPhase4Step3(this, false)">4. sunset</button>
+            </div>
+          </div>
+
+          <div class="reveal-box hidden" id="revealBoxPhase4Step3">
+            <div class="reveal-header">Exactly.</div>
+            <p>The condition being checked is <code>has_id</code>.</p>
+            <div class="code-output">
+              <span class="output-label">Program Output:</span>
+              <span class="output-text highlight">"Allow entry"</span>
+            </div>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" id="btnStep19Next" disabled onclick="nextStep()">Predict the Outcome →</button>
+        </div>
+      </section>
+
+      <!-- STEP 20 (Phase 4 - Step 4): Run Program & Predict -->
+      <section class="step-card" data-step="20">
+        <div class="scene-tag challenge-tag">Transfer Challenge — Step 4 of 6</div>
+        <h2 class="scene-heading">Predict the Output</h2>
+        <div class="story-body">
+          <p>Now suppose a student arrives without an ID:</p>
+
+          <div class="code-interactive-card">
+            <div class="code-header">
+              <span>entry_system.py</span>
+            </div>
+            <div class="code-editor-sim">
+              <div class="code-line"><span class="var">has_id</span> = <span class="val">False</span></div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="kw">if</span> <span class="var">has_id</span>:</div>
+              <div class="code-line">    <span class="func">print</span>(<span class="str">"Allow entry"</span>)</div>
+              <div class="code-line"><span class="kw">else</span>:</div>
+              <div class="code-line">    <span class="func">print</span>(<span class="str">"Entry denied"</span>)</div>
+            </div>
+          </div>
+
+          <div class="comparison-prompt">
+            <h3>What will happen when this code runs?</h3>
+            <div class="options-grid" id="optionsGridPhase4Step4">
+              <button class="option-btn" onclick="checkAnswerPhase4Step4(this, false)">A. Allow entry</button>
+              <button class="option-btn" onclick="checkAnswerPhase4Step4(this, true)">B. Entry denied</button>
+              <button class="option-btn" onclick="checkAnswerPhase4Step4(this, false)">C. Nothing happens</button>
+              <button class="option-btn" onclick="checkAnswerPhase4Step4(this, false)">D. Python gives an error</button>
+            </div>
+          </div>
+
+          <div class="reveal-box hidden" id="revealBoxPhase4Step4">
+            <div class="reveal-header">Correct.</div>
+            <p>The condition is false, so Python follows the <code>else</code> block.</p>
+            <div class="code-output">
+              <span class="output-label">Actual Output:</span>
+              <span class="output-text" style="color: #C86B4F;">"Entry denied"</span>
+            </div>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" id="btnStep20Next" disabled onclick="nextStep()">Final Reflection →</button>
+        </div>
+      </section>
+
+      <!-- STEP 21 (Phase 4 - Step 5): Final Did You Notice Reflection -->
+      <section class="step-card" data-step="21">
+        <div class="scene-tag discovery-tag">Transfer Challenge — Step 5 of 6</div>
+        
+        <div class="did-you-notice-card" style="padding: 28px;">
+          <div class="dyn-header">
+            <span class="dyn-badge" style="font-size: 1rem; padding: 6px 18px;">DID YOU NOTICE?</span>
+          </div>
+
+          <div class="staggered-reflections">
+            <p class="ref-line">The story changed.</p>
+            <p class="ref-line">The characters changed.</p>
+            <p class="ref-line">The situation changed.</p>
+            <p class="ref-line highlight-ref">But the pattern stayed the same.</p>
+          </div>
+
+          <div class="pattern-sequence" style="background: #EAE0CD; padding: 16px;">
+            <div class="seq-step check">CHECK</div>
+            <div class="seq-arrow">➔</div>
+            <div class="seq-step decide">DECIDE</div>
+            <div class="seq-arrow">➔</div>
+            <div class="seq-step act">ACT</div>
+          </div>
+
+          <!-- Structural Comparison Matrix -->
+          <div class="structural-comparison-box">
+            <div class="struct-card">
+              <div class="struct-title">Birbal's Story</div>
+              <div class="struct-condition">Was it before sunset?</div>
+              <div class="struct-action">➔ Reward / No reward</div>
+            </div>
+
+            <div class="struct-card">
+              <div class="struct-title">College Event</div>
+              <div class="struct-condition">Does the student have a valid ID?</div>
+              <div class="struct-action">➔ Allow / Deny entry</div>
+            </div>
+          </div>
+
+          <div class="dyn-footer-question">
+            <h3 style="font-size: 1.15rem; color: #967432;">Once you understand the pattern, you can use it in any situation.</h3>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Summary of What You Learned →</button>
+        </div>
+      </section>
+
+      <!-- STEP 22 (Phase 4 - Step 6): Final Concept Summary -->
+      <section class="step-card" data-step="22">
+        <div class="scene-tag conclusion-tag">Transfer Challenge — Step 6 of 6</div>
+        <h2 class="scene-heading">WHAT YOU DISCOVERED</h2>
+        <div class="story-body">
+          <div class="final-summary-cards">
+            <div class="summary-card concept-card">
+              <div class="card-term">CONDITION</div>
+              <p class="card-desc">Something we check before making a decision.</p>
+            </div>
+
+            <div class="summary-card if-card">
+              <div class="card-term kw-text">if</div>
+              <p class="card-desc">What to do when the condition is true.</p>
+            </div>
+
+            <div class="summary-card else-card">
+              <div class="card-term kw-text">else</div>
+              <p class="card-desc">What to do when the condition is not true.</p>
+            </div>
+          </div>
+
+          <div class="vertical-pattern-flow">
+            <div class="vert-node check">CHECK</div>
+            <div class="vert-arrow">↓</div>
+            <div class="vert-node decide">DECIDE</div>
+            <div class="vert-arrow">↓</div>
+            <div class="vert-node act">ACT</div>
+          </div>
+
+          <div class="did-you-notice-banner final-banner">
+            <div class="dyn-banner-title" style="font-size: 1.4rem;">Chapter Complete</div>
+            <p class="final-quote" style="font-size: 1.2rem;">
+              "You discovered the idea first.<br>
+              Python gave you a way to express it."
+            </p>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-accent btn-lg" onclick="restartModule()">↻ Replay Learning Journey</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
