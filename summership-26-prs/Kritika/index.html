@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The High Pass: Swati's Himalayan Ride — PyBe Discovery Lab</title>
+  <meta name="description"
+    content="Discover Python exception handling organically through Swati's solo Royal Enfield ride from Manali to Leh across 474 km of Himalayan passes.">
+
+  <!-- Curated Google Fonts: Cinzel, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Modular CSS System (The High Pass v3) -->
+  <link rel="stylesheet" href="css/base.css?v=6">
+  <link rel="stylesheet" href="css/hud.css?v=6">
+  <link rel="stylesheet" href="css/stage.css?v=6">
+  <link rel="stylesheet" href="css/interactions.css?v=6">
+  <link rel="stylesheet" href="css/quickcheck.css?v=6">
+</head>
+
+<body>
+
+  <div id="app">
+
+    <!-- Top Himalayan Prayer Ribbon -->
+    <div class="prayer-ribbon" aria-hidden="true">
+      <div class="pr-blue"></div>
+      <div class="pr-white"></div>
+      <div class="pr-red"></div>
+      <div class="pr-green"></div>
+      <div class="pr-yellow"></div>
+      <div class="pr-blue"></div>
+      <div class="pr-white"></div>
+      <div class="pr-red"></div>
+      <div class="pr-green"></div>
+      <div class="pr-yellow"></div>
+    </div>
+
+    <!-- Cinematic Top HUD: Brand + 4-Lamp Bike Dashboard + Progress -->
+    <header class="hud" role="banner">
+      <div class="hud-left">
+        <button class="brand" onclick="goToScene(0)" aria-label="Return to Start">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+          </svg>
+          <span class="brand-title">THE HIGH PASS</span>
+        </button>
+      </div>
+
+      <!-- Center: 4-Stage Mental Model Lamps -->
+      <div class="hud-center">
+        <div class="dashboard-lamps" role="status" aria-label="Motorcycle Exception Dashboard">
+          <div class="lamp" data-stage="try" title="Stage 1: Road (try)">
+            <svg class="lamp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M4 19L10 5M20 19L14 5M12 8v3M12 15v2" />
+            </svg>
+            <span class="lamp-label">Road</span>
+          </div>
+
+          <div class="lamp" data-stage="except" title="Stage 2: Fix (except)">
+            <svg class="lamp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path
+                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+            </svg>
+            <span class="lamp-label">Fix</span>
+          </div>
+
+          <div class="lamp" data-stage="else" title="Stage 3: Chai (else)">
+            <svg class="lamp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8zM6 2v2M10 2v2M14 2v2" />
+            </svg>
+            <span class="lamp-label">Chai</span>
+          </div>
+
+          <div class="lamp" data-stage="finally" title="Stage 4: Camp (finally)">
+            <svg class="lamp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M3 20h18L12 4 3 20zM12 20v-8" />
+            </svg>
+            <span class="lamp-label">Camp</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hud-right">
+        <div class="step-counter" id="hud-step-counter">01 / 12</div>
+        <button class="sound-btn" id="audio-toggle-btn" onclick="toggleAudio()" aria-label="Toggle Sound">
+          <!-- Muted SVG -->
+          <svg id="icon-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="1" y1="1" x2="23" y2="23" />
+            <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" />
+            <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23" />
+            <line x1="12" y1="19" x2="12" y2="23" />
+            <line x1="8" y1="23" x2="16" y2="23" />
+          </svg>
+          <!-- Unmuted SVG -->
+          <svg id="icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Full-Bleed Photo Stage -->
+    <main class="stage" id="photo-stage-container" role="main">
+      <div class="photo-bg ken-burns" id="photo-stage-bg" role="img" aria-label="Himalayan mountain landscape"></div>
+      <div class="photo-scrim"></div>
+
+      <!-- Location Badge (top-left) -->
+      <div class="location-badge">
+        <span class="act-pill" id="photo-act-pill">ACT 1: THE RIDE</span>
+        <h1 class="place-name" id="photo-place-name">MANALI BASE</h1>
+        <span class="altitude" id="photo-elevation-value">6,726 FT</span>
+      </div>
+
+      <!-- Compact Radio Bubble (top-right) -->
+      <div class="radio-bubble" id="radio-bubble" aria-live="polite">
+        <svg class="radio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="2" />
+          <path
+            d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
+        </svg>
+        <div class="radio-content">
+          <span class="radio-speaker" id="radio-speaker">Tashi</span>
+          <span class="radio-text" id="radio-text">Weight kills. Pack only the essentials.</span>
+        </div>
+      </div>
+
+      <!-- Collapsible Quick Check Drawer & Trigger Tab -->
+      <button class="qc-tab" id="quickcheck-tab" onclick="toggleQuickCheckDrawer()" aria-label="Toggle Quick Check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+        CHECKPOINT
+      </button>
+
+      <aside class="quickcheck-drawer" id="quickcheck-drawer" role="complementary" aria-label="Trail Checkpoint">
+        <button class="qc-toggle" onclick="toggleQuickCheckDrawer()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <span>TRAIL CHECKPOINT (CLOSE ✕)</span>
+        </button>
+        <div class="qc-body" id="quickcheck-body">
+          <!-- Dynamically populated per scene -->
+        </div>
+      </aside>
+
+      <!-- Active Verb Interaction Layer (Docker) -->
+      <div class="interaction-layer" id="interaction-layer"></div>
+
+      <!-- Bottom Narration Bar (<= 12 words) -->
+      <div class="narration-bar">
+        <p class="narration-text" id="stage-narration-text">
+          Panniers hold five. Pack for trouble.
+        </p>
+      </div>
+    </main>
+
+    <!-- Bottom Elevation Profile Footer -->
+    <footer class="elevation-footer" role="navigation" aria-label="Pass Elevation Navigation">
+      <button class="nav-btn" id="btn-prev" onclick="prevScene()" aria-label="Previous Pass Stage">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        <span>Previous</span>
+      </button>
+
+      <!-- SVG Elevation Profile with Travelling Motorcycle Marker -->
+      <div class="elevation-track">
+        <svg class="elevation-svg" id="elevation-svg" viewBox="0 0 900 38" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="elevActiveGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="50%" stop-color="#f5b942" />
+              <stop offset="100%" stop-color="#ef4444" />
+            </linearGradient>
+          </defs>
+
+          <!-- Inactive Background Trail -->
+          <polyline id="elev-trail-bg" points="" fill="none" stroke="rgba(255, 255, 255, 0.16)" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- Active Visited Trail -->
+          <polyline id="elev-trail-active" points="" fill="none" stroke="url(#elevActiveGrad)" stroke-width="3"
+            stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- Pass Summit Nodes -->
+          <g id="elev-nodes-group"></g>
+
+          <!-- Travelling Bike Marker -->
+          <g id="elev-bike-marker" transform="translate(30, 32)">
+            <circle cx="0" cy="0" r="7" fill="#f5b942" opacity="0.3" />
+            <circle cx="0" cy="0" r="4" fill="#fff" stroke="#f5b942" stroke-width="1.8" />
+          </g>
+        </svg>
+      </div>
+
+      <button class="nav-btn nav-btn-primary locked" id="btn-next" onclick="nextScene()" aria-label="Next Pass Stage">
+        <span>Next Stage</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+    </footer>
+
+  </div>
+
+  <!-- Application Logic Modules -->
+  <script src="js/scenes.js?v=6"></script>
+  <script src="js/schema.js?v=6"></script>
+  <script src="js/audio.js?v=6"></script>
+  <script src="js/dragkit.js?v=6"></script>
+  <script src="js/interactions/pack.js?v=6"></script>
+  <script src="js/interactions/wrap.js?v=6"></script>
+  <script src="js/interactions/match.js?v=6"></script>
+  <script src="js/interactions/wire.js?v=6"></script>
+  <script src="js/interactions/predict.js?v=6"></script>
+  <script src="js/interactions/timer.js?v=6"></script>
+  <script src="js/interactions/order.js?v=6"></script>
+  <script src="js/interactions/flip.js?v=6"></script>
+  <script src="js/interactions/runbreak.js?v=6"></script>
+  <script src="js/interactions/tapline.js?v=6"></script>
+  <script src="js/interactions/flag.js?v=6"></script>
+  <script src="js/interactions/collect.js?v=6"></script>
+  <script src="js/certificate.js?v=6"></script>
+  <script src="js/engine.js?v=6"></script>
+</body>
+
+</html>
