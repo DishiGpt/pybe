@@ -106,45 +106,45 @@ const Level5 = () => {
   ];
 
   return (
-    <div className="level-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '36px 20px', maxWidth: '980px', margin: '0 auto' }}>
+    <div className="level-container level1-light-theme" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '36px 20px', maxWidth: '980px', margin: '0 auto' }}>
       <div style={{
         display: 'inline-flex',
         alignItems: 'center',
         gap: '10px',
-        background: 'rgba(16, 185, 129, 0.15)',
-        border: '1px solid rgba(16, 185, 129, 0.4)',
+        background: '#fbeae7',
+        border: '1px solid #f4cbc4',
         padding: '6px 18px',
         borderRadius: '30px',
-        color: '#34d399',
-        fontSize: '0.88rem',
+        color: '#c25b4a',
+        fontSize: '0.86rem',
         fontWeight: 700,
         marginBottom: '16px',
-        letterSpacing: '1px'
+        letterSpacing: '0.8px'
       }}>
         <Award size={18} /> FINAL COMPREHENSIVE CERTIFICATION EXAM
       </div>
 
-      <h1 style={{ fontSize: '2.8rem', color: '#f8fafc', fontWeight: 800, textShadow: '0 0 25px rgba(16, 185, 129, 0.4)', marginBottom: '14px' }}>
+      <h1 style={{ fontSize: '2.8rem', color: '#2b2b2b', fontFamily: '"Fraunces", Georgia, serif', fontWeight: 700, marginBottom: '14px' }}>
         Master Python Memory Architect
       </h1>
 
-      <p style={{ maxWidth: '820px', fontSize: '1.15rem', lineHeight: '1.75', margin: '0 auto 28px auto', color: '#cbd5e1' }}>
+      <p style={{ maxWidth: '820px', fontSize: '1.08rem', lineHeight: '1.7', margin: '0 auto 28px auto', color: '#5b5648' }}>
         You have tackled all 4 foundational memory optimization levels: <strong>Shared References</strong>, <strong>In-Place Mutation</strong>, <strong>Call Stack & Recursion Depth</strong>, and <strong>Garbage Collection & Dereferencing</strong>.
         Test your expertise across 10 multi-format challenges: <em>MCQ, Debugging, Fill in the Blanks, and Jumbled Code</em>.
       </p>
 
       {/* Feature Topic Badges */}
       <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '32px' }}>
-        <span style={{ padding: '6px 14px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#60a5fa', fontSize: '0.85rem', fontWeight: 600 }}>
+        <span style={{ padding: '6px 14px', borderRadius: '8px', background: '#fff2e8', border: '1px solid rgba(246, 159, 92, 0.4)', color: '#7c4a2d', fontSize: '0.85rem', fontWeight: 600 }}>
           📄 Level 1: Shared References
         </span>
-        <span style={{ padding: '6px 14px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', color: '#34d399', fontSize: '0.85rem', fontWeight: 600 }}>
+        <span style={{ padding: '6px 14px', borderRadius: '8px', background: '#e9f4ec', border: '1px solid #c6e6cd', color: '#2f6564', fontSize: '0.85rem', fontWeight: 600 }}>
           💳 Level 2: In-Place Mutation
         </span>
-        <span style={{ padding: '6px 14px', borderRadius: '8px', background: 'rgba(139, 92, 246, 0.15)', border: '1px solid rgba(139, 92, 246, 0.3)', color: '#c084fc', fontSize: '0.85rem', fontWeight: 600 }}>
+        <span style={{ padding: '6px 14px', borderRadius: '8px', background: '#fdf3e2', border: '1px solid #e8a33d', color: '#8c5914', fontSize: '0.85rem', fontWeight: 600 }}>
           📦 Level 3: Call Stack Depth
         </span>
-        <span style={{ padding: '6px 14px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.15)', border: '1px solid rgba(245, 158, 11, 0.3)', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 600 }}>
+        <span style={{ padding: '6px 14px', borderRadius: '8px', background: '#fbeae7', border: '1px solid #f4cbc4', color: '#c25b4a', fontSize: '0.85rem', fontWeight: 600 }}>
           🧹 Level 4: Garbage Collection
         </span>
       </div>
@@ -154,18 +154,31 @@ const Level5 = () => {
           className="btn primary"
           onClick={() => setShowQuiz(true)}
           style={{
-            fontSize: '1.25rem',
-            padding: '16px 36px',
-            background: 'linear-gradient(135deg, #10b981, #059669)',
-            borderRadius: '12px',
-            boxShadow: '0 8px 24px rgba(16, 185, 129, 0.4)',
+            fontSize: '1.15rem',
+            padding: '14px 34px',
+            background: 'linear-gradient(135deg, #e67635 0%, #cf5717 100%)',
+            border: 'none',
+            color: '#ffffff',
+            borderRadius: '999px',
+            boxShadow: '0 6px 20px rgba(230, 118, 53, 0.35)',
             cursor: 'pointer',
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '10px'
+            gap: '10px',
+            fontFamily: '"Nunito Sans", sans-serif',
+            fontWeight: 700,
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
+            e.currentTarget.style.boxShadow = '0 8px 24px rgba(230, 118, 53, 0.45)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'none';
+            e.currentTarget.style.boxShadow = '0 6px 20px rgba(230, 118, 53, 0.35)';
           }}
         >
-          <Sparkles size={22} />
+          <Sparkles size={20} />
           <span>Begin Final 10-Question Exam</span>
         </button>
       ) : (
@@ -179,11 +192,20 @@ const Level5 = () => {
       )}
 
       {hasCompleted && (
-        <div style={{ marginTop: '28px', padding: '20px 28px', background: 'rgba(16, 185, 129, 0.18)', border: '2px solid #10b981', borderRadius: '14px', maxWidth: '820px', width: '100%' }}>
-          <h2 style={{ color: '#34d399', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+        <div style={{
+          marginTop: '28px',
+          padding: '24px 28px',
+          background: '#e9f4ec',
+          border: '1.5px solid #4f9a63',
+          borderRadius: '16px',
+          maxWidth: '820px',
+          width: '100%',
+          boxShadow: '0 4px 16px rgba(79, 154, 99, 0.12)'
+        }}>
+          <h2 style={{ color: '#256038', margin: '0 0 10px 0', fontFamily: '"Fraunces", Georgia, serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '1.4rem' }}>
             <CheckCircle size={28} /> Certified Python Memory Master
           </h2>
-          <p style={{ margin: 0, color: '#e2e8f0', fontSize: '1.05rem', lineHeight: '1.6' }}>
+          <p style={{ margin: 0, color: '#4a443b', fontSize: '1.02rem', lineHeight: '1.6' }}>
             You have successfully mastered memory pointers, mutation semantics, recursion call frames, and garbage collection in Python. You are ready to build ultra-scalable, crash-proof production software!
           </p>
         </div>

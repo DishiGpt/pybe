@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RefreshCw, Play, ArrowRight, Eye, HelpCircle, CheckCircle, AlertTriangle } from 'lucide-react';
+import { RefreshCw, Play, ArrowRight, Eye, HelpCircle, CheckCircle, AlertTriangle, Cpu } from 'lucide-react';
 import Quiz from '../components/Quiz';
 import StorySlider from '../components/StorySlider';
 import { playThud, playPop, unlockAudio } from '../utils/audio';
@@ -17,8 +17,10 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
   const [selectedLine, setSelectedLine] = useState(null);
   const [explainStep, setExplainStep] = useState(1);
   const [prediction, setPrediction] = useState(null);
+  const [q1Choice, setQ1Choice] = useState(null);
+  const [q2Choice, setQ2Choice] = useState(null);
   const [showHeapInspector, setShowHeapInspector] = useState(true);
-
+  const isLightMode = true; // Always in light theme
 
   const selectLine = (lineNum) => {
     setSelectedLine(lineNum);
@@ -28,12 +30,27 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
   const getLineStyle = (lineNum) => {
     const isLineActive = executingLine === lineNum;
     return {
-      background: isLineActive ? (mode === 'duplicate' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(16, 185, 129, 0.4)') : 'transparent',
-      borderLeft: isLineActive ? (mode === 'duplicate' ? '3px solid #ef4444' : '3px solid #10b981') : '3px solid transparent',
+      background: isLineActive
+        ? (mode === 'duplicate'
+          ? '#fff3e8'
+          : '#e9f4ec')
+        : 'transparent',
+      borderLeft: isLineActive
+        ? (mode === 'duplicate' ? '3px solid #FA994F' : '3px solid #4f9a63')
+        : '3px solid transparent',
       paddingLeft: '5px',
       transition: 'all 0.2s',
-      color: isLineActive ? '#fff' : '#cbd5e1'
+      color: isLineActive
+        ? (mode === 'duplicate' ? '#7c4a2d' : '#256038')
+        : '#2b2b2b'
     };
+  };
+
+  const getCodeLineBg = (lineNum) => {
+    if (selectedLine === lineNum) {
+      return '#fff8f2';
+    }
+    return getLineStyle(lineNum).background;
   };
 
   const questions = [
@@ -460,6 +477,8 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
         setStickyNotes([]);
         setMode('pointer');
         setPrediction(null);
+        setQ1Choice(null);
+        setQ2Choice(null);
         setStoryStep(4);
         setHasCrashed(false);
       }
@@ -479,26 +498,14 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
         storyStep={storyStep}
         setStoryStep={setStoryStep}
         steps={steps}
+        isLightMode={true}
       />
     );
   }
 
   const renderAnimatedExplanation = (isDanger, explanations) => {
     if (selectedLine === null || selectedLine === undefined || !explanations[selectedLine]) {
-      return (
-        <div style={{
-          marginTop: '12px',
-          padding: '12px 16px',
-          background: 'rgba(255,255,255,0.02)',
-          borderRadius: '10px',
-          fontSize: '0.82rem',
-          color: '#94a3b8',
-          textAlign: 'center',
-          border: '1px dashed rgba(255, 255, 255, 0.12)'
-        }}>
-          💡 <em>Click any line of code above to inspect what happens in RAM!</em>
-        </div>
-      );
+      return null;
     }
 
     const data = explanations[selectedLine];
@@ -508,7 +515,7 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
       ? 'linear-gradient(135deg, #ef4444, #f97316)'
       : 'linear-gradient(135deg, #10b981, #06b6d4)';
 
-    // Flatten into 4 distinct single points
+    // Flatten into 4 distinct single points with light, warm editorial styling
     const points = [
       {
         step: 1,
@@ -517,8 +524,8 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
         icon: data.part1.point1.icon,
         label: data.part1.point1.label,
         text: data.part1.point1.text,
-        color: isDanger ? '#ef4444' : '#38bdf8',
-        bg: isDanger ? 'rgba(239, 68, 68, 0.15)' : 'rgba(56, 189, 248, 0.15)'
+        color: isDanger ? '#7c4a2d' : '#2f6564',
+        bg: isDanger ? '#fff2e8' : '#e9f4ec'
       },
       {
         step: 2,
@@ -527,8 +534,8 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
         icon: data.part1.point2.icon,
         label: data.part1.point2.label,
         text: data.part1.point2.text,
-        color: isDanger ? '#f97316' : '#60a5fa',
-        bg: isDanger ? 'rgba(249, 115, 22, 0.15)' : 'rgba(96, 165, 250, 0.15)'
+        color: isDanger ? '#8c5914' : '#1e3a8a',
+        bg: isDanger ? '#fdf3e2' : '#eff6ff'
       },
       {
         step: 3,
@@ -537,8 +544,8 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
         icon: data.part2.point1.icon,
         label: data.part2.point1.label,
         text: data.part2.point1.text,
-        color: isDanger ? '#dc2626' : '#34d399',
-        bg: isDanger ? 'rgba(220, 38, 38, 0.15)' : 'rgba(52, 211, 153, 0.15)'
+        color: isDanger ? '#9c4d3d' : '#15803d',
+        bg: isDanger ? '#fbf0ed' : '#f0fdf4'
       },
       {
         step: 4,
@@ -547,8 +554,8 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
         icon: data.part2.point2.icon,
         label: data.part2.point2.label,
         text: data.part2.point2.text,
-        color: isDanger ? '#e11d48' : '#10b981',
-        bg: isDanger ? 'rgba(225, 29, 72, 0.15)' : 'rgba(16, 185, 129, 0.15)'
+        color: isDanger ? '#7c4a2d' : '#0f766e',
+        bg: isDanger ? '#fff2e8' : '#ccfbf1'
       }
     ];
 
@@ -561,66 +568,99 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
         className="line-explain-card"
         style={{
           borderLeft: `4px solid ${activePoint.color}`,
-          border: `1px solid ${glowColor}`,
-          boxShadow: `0 10px 32px ${glowColor}, 0 2px 10px rgba(0,0,0,0.5)`
+          border: '1.5px solid #e4dcc8',
+          background: '#ffffff',
+          borderRadius: '14px',
+          padding: '16px',
+          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
         }}
       >
         {/* Top Header & Step Navigation */}
-        <div className="explain-top-bar">
-          <div className="explain-step-pills">
-            {points.map((p) => (
-              <button
-                key={p.step}
-                onClick={() => setExplainStep(p.step)}
-                className={`explain-step-pill ${explainStep === p.step
-                  ? (isDanger ? 'active-danger' : 'active-success')
-                  : ''
-                  }`}
-              >
-                {p.shortTag}
-              </button>
-            ))}
+        <div className="explain-top-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+          <div className="explain-step-pills" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+            {points.map((p) => {
+              const isActive = explainStep === p.step;
+              return (
+                <button
+                  key={p.step}
+                  type="button"
+                  onClick={() => setExplainStep(p.step)}
+                  style={{
+                    background: isActive ? p.bg : '#ffffff',
+                    border: isActive ? `1.5px solid ${p.color}` : '1px solid #e4dcc8',
+                    color: isActive ? p.color : '#7c7365',
+                    fontWeight: isActive ? 700 : 500,
+                    borderRadius: '8px',
+                    padding: '5px 12px',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  {p.shortTag}
+                </button>
+              );
+            })}
           </div>
 
           <button
             onClick={() => setSelectedLine(null)}
+            type="button"
             style={{
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              color: '#94a3b8',
+              background: '#ffffff',
+              border: '1px solid #e4dcc8',
+              color: '#5b5648',
               cursor: 'pointer',
-              fontSize: '0.75rem',
-              padding: '3px 8px',
-              borderRadius: '6px',
-              transition: 'all 0.2s'
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              padding: '4px 10px',
+              borderRadius: '999px',
+              transition: 'all 0.15s ease'
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = '#94a3b8'; e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'; }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#2b2b2b'; e.currentTarget.style.background = '#f4efe4'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#5b5648'; e.currentTarget.style.background = '#ffffff'; }}
           >
             ✕ Close
           </button>
         </div>
 
         {/* The 1 Active Focus Point Card */}
-        <div className="single-point-hero" style={{ borderLeft: `3px solid ${activePoint.color}` }}>
-          <div
-            className="single-point-top-badge"
-            style={{ background: activePoint.bg, color: activePoint.color }}
-          >
-            <span>POINT {activePoint.step} OF 4</span>
-            <span>•</span>
-            <span>{activePoint.category}</span>
-          </div>
+        <div className="single-point-hero" style={{
+          background: '#fffdfa',
+          border: '1px solid #e4dcc8',
+          borderLeft: `3px solid ${activePoint.color}`,
+          borderRadius: '12px',
+          padding: '14px 16px'
+        }}>
 
-          <div className="single-point-body">
-            <div className="single-point-icon-bubble">
+          <div className="single-point-body" style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+            <div className="single-point-icon-bubble" style={{
+              background: '#f4efe4',
+              border: '1px solid #e4dcc8',
+              borderRadius: '10px',
+              padding: '10px',
+              fontSize: '1.25rem',
+              lineHeight: 1
+            }}>
               {activePoint.icon}
             </div>
-            <div className="single-point-content">
-              <span className="single-point-title" style={{ color: activePoint.color }}>
+            <div className="single-point-content" style={{ flex: 1 }}>
+              <span className="single-point-title" style={{
+                color: activePoint.color,
+                fontFamily: '"Fraunces", Georgia, serif',
+                fontSize: '1rem',
+                fontWeight: 800,
+                display: 'block',
+                marginBottom: '4px'
+              }}>
                 {activePoint.label}
               </span>
-              <p className="single-point-desc">
+              <p className="single-point-desc" style={{
+                color: '#4a443b',
+                fontSize: '0.88rem',
+                lineHeight: '1.6',
+                margin: 0
+              }}>
                 {activePoint.text}
               </p>
             </div>
@@ -628,53 +668,89 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
         </div>
 
         {/* Progress Bar */}
-        <div className="explain-progress-bar">
+        <div className="explain-progress-bar" style={{
+          background: '#f0ece0',
+          height: '4px',
+          borderRadius: '2px',
+          margin: '14px 0 10px',
+          overflow: 'hidden'
+        }}>
           <div
             className="explain-progress-fill"
             style={{
               width: `${(explainStep / 4) * 100}%`,
+              height: '100%',
               background: isDanger
-                ? 'linear-gradient(90deg, #ef4444, #f97316)'
-                : 'linear-gradient(90deg, #38bdf8, #10b981)'
+                ? 'linear-gradient(90deg, #FA994F, #e8a33d)'
+                : 'linear-gradient(90deg, #2f6564, #4f9a63)',
+              transition: 'width 0.25s ease'
             }}
           />
         </div>
 
         {/* Bottom Interactive Flow Bar */}
-        <div className="explain-bottom-bar">
+        <div className="explain-bottom-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button
             onClick={() => setExplainStep(s => Math.max(s - 1, 1))}
             disabled={explainStep === 1}
+            type="button"
             className="explain-nav-btn prev"
+            style={{
+              background: '#ffffff',
+              border: '1px solid #e4dcc8',
+              color: explainStep === 1 ? '#b8b0a2' : '#5b5648',
+              borderRadius: '999px',
+              padding: '6px 14px',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              cursor: explainStep === 1 ? 'not-allowed' : 'pointer'
+            }}
           >
             <span>← Prev</span>
           </button>
 
-          <span style={{ fontSize: '0.76rem', color: '#64748b', fontWeight: '600' }}>
+          <span style={{ fontSize: '0.78rem', color: '#7c7365', fontWeight: 600 }}>
             Point {explainStep} of 4
           </span>
 
           {explainStep < 4 ? (
             <button
               onClick={() => setExplainStep(s => Math.min(s + 1, 4))}
+              type="button"
               className="explain-nav-btn next"
               style={{
-                background: nextBtnBg,
-                color: '#fff'
+                background: isDanger ? '#fff2e8' : '#e9f4ec',
+                color: isDanger ? '#7c4a2d' : '#2f6564',
+                border: isDanger ? '1px solid #FA994F' : '1px solid #4f9a63',
+                borderRadius: '999px',
+                padding: '6px 14px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer'
               }}
             >
               <span>Next Point</span>
               <span className="arrow-slide-anim" style={{ display: 'flex' }}>
-                <ArrowRight size={15} strokeWidth={2.8} />
+                <ArrowRight size={14} strokeWidth={2.8} />
               </span>
             </button>
           ) : (
             <button
               onClick={() => setSelectedLine(null)}
+              type="button"
               className="explain-nav-btn next"
               style={{
-                background: 'linear-gradient(135deg, #10b981, #059669)',
-                color: '#fff'
+                background: '#e9f4ec',
+                color: '#256038',
+                border: '1px solid #4f9a63',
+                borderRadius: '999px',
+                padding: '6px 14px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                cursor: 'pointer'
               }}
             >
               <span>Done ✓</span>
@@ -685,232 +761,567 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
     );
   };
 
-  return (
-    <div className="level-container">
-      <div className="story-panel glass-panel">
-        <h2>Code Execution</h2>
+  const renderPreFlightCard = () => {
+    const isBothSelected = q1Choice !== null && q2Choice !== null;
+    const isQ1Correct = mode === 'duplicate' ? q1Choice === 'B' : q1Choice === 'A';
+    const isQ2Correct = mode === 'duplicate' ? q2Choice === 'B' : q2Choice === 'A';
+    const isBothCorrect = isBothSelected && isQ1Correct && isQ2Correct;
 
-        {/* Pre-Flight Hypothesis Prediction Card */}
-        {!prediction?.isCorrect && (
-        <div style={{
-          marginTop: '12px',
-          background: 'rgba(15, 23, 42, 0.75)',
-          border: prediction
-            ? (prediction.isCorrect ? '1px solid #10b981' : '1px solid #f59e0b')
-            : '1px solid rgba(255, 255, 255, 0.15)',
-          borderRadius: '12px',
-          padding: '12px 14px',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
-          transition: 'all 0.3s ease'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '6px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.1rem' }}>🎯</span>
-              <strong style={{ fontSize: '0.85rem', color: '#f8fafc', letterSpacing: '0.4px' }}>
-                {mode === 'duplicate' ? "Pre-Flight Hypothesis 1: Deep Copy" : "Pre-Flight Hypothesis 2: Shared Pointer"}
+    return (
+      <div style={{
+        width: '100%',
+        background: '#fdfbf5',
+        border: isBothSelected
+          ? (isBothCorrect ? '1.5px solid #4f9a63' : '1.5px solid #e8a33d')
+          : '1.5px solid #e4dcc8',
+        borderRadius: '18px',
+        padding: '24px 26px',
+        boxShadow: '0 4px 20px rgba(91, 86, 72, 0.06)',
+        transition: 'all 0.3s ease',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px'
+      }}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #e4dcc8', paddingBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '1.4rem' }}>🎯</span>
+            <div>
+              <strong style={{ fontSize: '1.15rem', fontFamily: '"Fraunces", Georgia, serif', color: '#2b2b2b', letterSpacing: '0.2px' }}>
+                {mode === 'duplicate' ? "Pre-Flight Check" : "Pre-Flight Check: Shared References"}
               </strong>
+              <span style={{ display: 'block', fontSize: '0.78rem', color: '#7c7365' }}>
+                Answer both questions before running the live simulation
+              </span>
             </div>
+          </div>
+        </div>
+
+        {/* QUESTION 1 */}
+        <div style={{
+          background: '#ffffff',
+          border: '1.5px solid #e4dcc8',
+          borderRadius: '14px',
+          padding: '16px 18px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
             <span style={{
-              fontSize: '0.72rem',
+              fontSize: '0.75rem',
               fontWeight: 700,
-              padding: '2px 8px',
-              borderRadius: '12px',
-              background: prediction ? (prediction.isCorrect ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)') : 'rgba(255, 255, 255, 0.08)',
-              color: prediction ? (prediction.isCorrect ? '#34d399' : '#fbbf24') : '#94a3b8',
-              border: `1px solid ${prediction ? (prediction.isCorrect ? '#10b981' : '#f59e0b') : 'rgba(255,255,255,0.1)'}`
+              color: '#7c4a2d',
+              background: '#fff2e8',
+              border: '1px solid rgba(246, 159, 92, 0.4)',
+              padding: '3px 10px',
+              borderRadius: '999px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.4px'
             }}>
-              {prediction ? (prediction.isCorrect ? "Prediction Tested ✓" : "Misconception Tested ⚠️") : "Test Intuition"}
+              Question 1
             </span>
           </div>
 
-          <p style={{ fontSize: '0.82rem', color: '#cbd5e1', margin: '0 0 10px 0', lineHeight: '1.4' }}>
+          <p style={{ fontSize: '0.94rem', color: '#2b2b2b', margin: 0, lineHeight: '1.5', fontWeight: 600 }}>
             {mode === 'duplicate'
-              ? "Before running code: What will happen in RAM when 1,000 students call copy.deepcopy()?"
-              : "Before running code: What happens in RAM when students execute 'student = announcement'?"
-            }
+              ? "Look at the loop on the left. What happens when each student opens the portal?"
+              : "Look at the updated code on the left. What happens when we execute 'student_pointer = announcement'?"}
           </p>
 
-          {!prediction ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {mode === 'duplicate' ? (
-                <>
-                  <button
-                    onClick={() => {
-                      unlockAudio();
-                      playPop();
-                      setPrediction({ choice: 'optimize', isCorrect: false });
-                    }}
-                    className="btn"
-                    style={{
-                      fontSize: '0.78rem',
-                      textAlign: 'left',
-                      padding: '7px 10px',
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid rgba(255, 255, 255, 0.12)',
-                      color: '#e2e8f0',
-                      lineHeight: '1.35'
-                    }}
-                  >
-                    <span>A. Python automatically reuses the existing list, keeping RAM &lt; 25 GB.</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      unlockAudio();
-                      playPop();
-                      setPrediction({ choice: 'crash', isCorrect: true });
-                    }}
-                    className="btn"
-                    style={{
-                      fontSize: '0.78rem',
-                      textAlign: 'left',
-                      padding: '7px 10px',
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid rgba(255, 255, 255, 0.12)',
-                      color: '#e2e8f0',
-                      lineHeight: '1.35'
-                    }}
-                  >
-                    <span>B. Python allocates 1,000 separate heap clones, triggering an Out-Of-Memory Crash!</span>
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => {
-                      unlockAudio();
-                      playPop();
-                      setPrediction({ choice: 'shared', isCorrect: true });
-                    }}
-                    className="btn"
-                    style={{
-                      fontSize: '0.78rem',
-                      textAlign: 'left',
-                      padding: '7px 10px',
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid rgba(255, 255, 255, 0.12)',
-                      color: '#e2e8f0',
-                      lineHeight: '1.35'
-                    }}
-                  >
-                    <span>A. All students point to the master object's memory address without cloning data (~0 extra RAM).</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      unlockAudio();
-                      playPop();
-                      setPrediction({ choice: 'duplicate', isCorrect: false });
-                    }}
-                    className="btn"
-                    style={{
-                      fontSize: '0.78rem',
-                      textAlign: 'left',
-                      padding: '7px 10px',
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid rgba(255, 255, 255, 0.12)',
-                      color: '#e2e8f0',
-                      lineHeight: '1.35'
-                    }}
-                  >
-                    <span>B. Each variable assignment still duplicates the 20 GB list in RAM.</span>
-                  </button>
-                </>
-              )}
-            </div>
-          ) : (
-            <div style={{
-              background: prediction.isCorrect ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
-              borderLeft: `3px solid ${prediction.isCorrect ? '#10b981' : '#f59e0b'}`,
-              padding: '8px 10px',
-              borderRadius: '6px',
-              fontSize: '0.8rem',
-              lineHeight: '1.45',
-              color: '#f1f5f9'
-            }}>
-              <p style={{ margin: 0 }}>
-                {prediction.isCorrect ? (
-                  mode === 'duplicate'
-                    ? "🎯 Spot-on intuition! Deepcopy creates a brand-new heap object tree for every student. Run the program below to watch physical RAM explode!"
-                    : "🎯 Excellent! Variables in Python bind to object references, not duplicate data. Run the program below to observe 100% stable RAM!"
-                ) : (
-                  mode === 'duplicate'
-                    ? "💡 Classic beginner misconception! Python deepcopy does NOT deduplicate identical lists automatically. Run the code below to see physical RAM crash!"
-                    : "💡 Common confusion! Unlike C++ value copying, assignment (=) in Python creates references, not copies. Run the code below to verify!"
-                )}
-              </p>
-              {!prediction.isCorrect && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {mode === 'duplicate' ? (
+              <>
                 <button
+                  type="button"
                   onClick={() => {
                     unlockAudio();
                     playPop();
-                    setPrediction(null);
+                    setQ1Choice('A');
                   }}
                   style={{
-                    marginTop: '8px',
-                    background: 'rgba(245, 158, 11, 0.2)',
-                    border: '1px solid #f59e0b',
-                    color: '#fbbf24',
-                    padding: '4px 10px',
-                    borderRadius: '6px',
-                    fontSize: '0.75rem',
+                    fontSize: '0.88rem',
+                    textAlign: 'left',
+                    padding: '12px 14px',
+                    background: q1Choice === 'A' ? '#fff8f2' : '#ffffff',
+                    border: q1Choice === 'A' ? '2px solid #FA994F' : '1.5px solid #e4dcc8',
+                    borderRadius: '12px',
+                    color: '#2b2b2b',
+                    lineHeight: '1.45',
                     cursor: 'pointer',
-                    fontWeight: 600,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px'
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    transition: 'all 0.15s ease',
+                    boxShadow: q1Choice === 'A' ? '0 2px 8px rgba(250, 153, 79, 0.2)' : 'none'
                   }}
                 >
-                  <span>🔄</span> Revise Hypothesis
+                  <span style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    border: q1Choice === 'A' ? '5px solid #FA994F' : '2px solid #d1c7b7',
+                    background: '#ffffff',
+                    marginTop: '2px',
+                    flexShrink: 0
+                  }} />
+                  <span><strong>A.</strong> Python will smartly share the existing noticeboard so memory stays low (&lt; 25 GB).</span>
                 </button>
-              )}
-            </div>
-          )}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    unlockAudio();
+                    playPop();
+                    setQ1Choice('B');
+                  }}
+                  style={{
+                    fontSize: '0.88rem',
+                    textAlign: 'left',
+                    padding: '12px 14px',
+                    background: q1Choice === 'B' ? '#fff8f2' : '#ffffff',
+                    border: q1Choice === 'B' ? '2px solid #FA994F' : '1.5px solid #e4dcc8',
+                    borderRadius: '12px',
+                    color: '#2b2b2b',
+                    lineHeight: '1.45',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    transition: 'all 0.15s ease',
+                    boxShadow: q1Choice === 'B' ? '0 2px 8px rgba(250, 153, 79, 0.2)' : 'none'
+                  }}
+                >
+                  <span style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    border: q1Choice === 'B' ? '5px solid #FA994F' : '2px solid #d1c7b7',
+                    background: '#ffffff',
+                    marginTop: '2px',
+                    flexShrink: 0
+                  }} />
+                  <span><strong>B.</strong> Python will literally clone an entire separate 20 GB duplicate noticeboard in RAM for every single student!</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    unlockAudio();
+                    playPop();
+                    setQ1Choice('A');
+                  }}
+                  style={{
+                    fontSize: '0.88rem',
+                    textAlign: 'left',
+                    padding: '12px 14px',
+                    background: q1Choice === 'A' ? '#fff8f2' : '#ffffff',
+                    border: q1Choice === 'A' ? '2px solid #FA994F' : '1.5px solid #e4dcc8',
+                    borderRadius: '12px',
+                    color: '#2b2b2b',
+                    lineHeight: '1.45',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    transition: 'all 0.15s ease',
+                    boxShadow: q1Choice === 'A' ? '0 2px 8px rgba(250, 153, 79, 0.2)' : 'none'
+                  }}
+                >
+                  <span style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    border: q1Choice === 'A' ? '5px solid #FA994F' : '2px solid #d1c7b7',
+                    background: '#ffffff',
+                    marginTop: '2px',
+                    flexShrink: 0
+                  }} />
+                  <span><strong>A.</strong> All 1,000 students simply point to the original noticeboard — zero duplicate copies are made!</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    unlockAudio();
+                    playPop();
+                    setQ1Choice('B');
+                  }}
+                  style={{
+                    fontSize: '0.88rem',
+                    textAlign: 'left',
+                    padding: '12px 14px',
+                    background: q1Choice === 'B' ? '#fff8f2' : '#ffffff',
+                    border: q1Choice === 'B' ? '2px solid #FA994F' : '1.5px solid #e4dcc8',
+                    borderRadius: '12px',
+                    color: '#2b2b2b',
+                    lineHeight: '1.45',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    transition: 'all 0.15s ease',
+                    boxShadow: q1Choice === 'B' ? '0 2px 8px rgba(250, 153, 79, 0.2)' : 'none'
+                  }}
+                >
+                  <span style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    border: q1Choice === 'B' ? '5px solid #FA994F' : '2px solid #d1c7b7',
+                    background: '#ffffff',
+                    marginTop: '2px',
+                    flexShrink: 0
+                  }} />
+                  <span><strong>B.</strong> Assigning with '=' still creates another full 20 GB duplicate copy behind the scenes for each student.</span>
+                </button>
+              </>
+            )}
+          </div>
         </div>
+
+        {/* QUESTION 2 */}
+        <div style={{
+          background: '#ffffff',
+          border: '1.5px solid #e4dcc8',
+          borderRadius: '14px',
+          padding: '16px 18px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+            <span style={{
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              color: '#7c4a2d',
+              background: '#fff2e8',
+              border: '1px solid rgba(246, 159, 92, 0.4)',
+              padding: '3px 10px',
+              borderRadius: '999px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.4px'
+            }}>
+              Question 2
+            </span>
+          </div>
+
+          <p style={{ fontSize: '0.94rem', color: '#2b2b2b', margin: 0, lineHeight: '1.5', fontWeight: 600 }}>
+            {mode === 'duplicate'
+              ? "Our server has a limit of 100 GB RAM. What happens when 1,000 students hit this noticeboard at the same time?"
+              : "When 1,000 students read the noticeboard simultaneously using shared pointers, what happens to server RAM?"}
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {mode === 'duplicate' ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    unlockAudio();
+                    playPop();
+                    setQ2Choice('A');
+                  }}
+                  style={{
+                    fontSize: '0.88rem',
+                    textAlign: 'left',
+                    padding: '12px 14px',
+                    background: q2Choice === 'A' ? '#fff8f2' : '#ffffff',
+                    border: q2Choice === 'A' ? '2px solid #FA994F' : '1.5px solid #e4dcc8',
+                    borderRadius: '12px',
+                    color: '#2b2b2b',
+                    lineHeight: '1.45',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    transition: 'all 0.15s ease',
+                    boxShadow: q2Choice === 'A' ? '0 2px 8px rgba(250, 153, 79, 0.2)' : 'none'
+                  }}
+                >
+                  <span style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    border: q2Choice === 'A' ? '5px solid #FA994F' : '2px solid #d1c7b7',
+                    background: '#ffffff',
+                    marginTop: '2px',
+                    flexShrink: 0
+                  }} />
+                  <span><strong>A.</strong> The server quietly compresses the data in the background and runs smoothly without crashing.</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    unlockAudio();
+                    playPop();
+                    setQ2Choice('B');
+                  }}
+                  style={{
+                    fontSize: '0.88rem',
+                    textAlign: 'left',
+                    padding: '12px 14px',
+                    background: q2Choice === 'B' ? '#fff8f2' : '#ffffff',
+                    border: q2Choice === 'B' ? '2px solid #FA994F' : '1.5px solid #e4dcc8',
+                    borderRadius: '12px',
+                    color: '#2b2b2b',
+                    lineHeight: '1.45',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    transition: 'all 0.15s ease',
+                    boxShadow: q2Choice === 'B' ? '0 2px 8px rgba(250, 153, 79, 0.2)' : 'none'
+                  }}
+                >
+                  <span style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    border: q2Choice === 'B' ? '5px solid #FA994F' : '2px solid #d1c7b7',
+                    background: '#ffffff',
+                    marginTop: '2px',
+                    flexShrink: 0
+                  }} />
+                  <span><strong>B.</strong> The server rapidly runs out of RAM (1,000 × 20 GB = 20,000 GB needed!) and violently crashes!</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    unlockAudio();
+                    playPop();
+                    setQ2Choice('A');
+                  }}
+                  style={{
+                    fontSize: '0.88rem',
+                    textAlign: 'left',
+                    padding: '12px 14px',
+                    background: q2Choice === 'A' ? '#fff8f2' : '#ffffff',
+                    border: q2Choice === 'A' ? '2px solid #FA994F' : '1.5px solid #e4dcc8',
+                    borderRadius: '12px',
+                    color: '#2b2b2b',
+                    lineHeight: '1.45',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    transition: 'all 0.15s ease',
+                    boxShadow: q2Choice === 'A' ? '0 2px 8px rgba(250, 153, 79, 0.2)' : 'none'
+                  }}
+                >
+                  <span style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    border: q2Choice === 'A' ? '5px solid #FA994F' : '2px solid #d1c7b7',
+                    background: '#ffffff',
+                    marginTop: '2px',
+                    flexShrink: 0
+                  }} />
+                  <span><strong>A.</strong> RAM stays completely stable at ~20 GB because everyone is looking at the same original board!</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    unlockAudio();
+                    playPop();
+                    setQ2Choice('B');
+                  }}
+                  style={{
+                    fontSize: '0.88rem',
+                    textAlign: 'left',
+                    padding: '12px 14px',
+                    background: q2Choice === 'B' ? '#fff8f2' : '#ffffff',
+                    border: q2Choice === 'B' ? '2px solid #FA994F' : '1.5px solid #e4dcc8',
+                    borderRadius: '12px',
+                    color: '#2b2b2b',
+                    lineHeight: '1.45',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    transition: 'all 0.15s ease',
+                    boxShadow: q2Choice === 'B' ? '0 2px 8px rgba(250, 153, 79, 0.2)' : 'none'
+                  }}
+                >
+                  <span style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    border: q2Choice === 'B' ? '5px solid #FA994F' : '2px solid #d1c7b7',
+                    background: '#ffffff',
+                    marginTop: '2px',
+                    flexShrink: 0
+                  }} />
+                  <span><strong>B.</strong> RAM will still steadily climb and crash the server because 1,000 students are connected.</span>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* VALIDATION & VERDICT (Directly below Question 2) */}
+        {isBothSelected ? (
+          <div style={{
+            background: isBothCorrect ? '#e9f4ec' : '#fdf3e2',
+            borderLeft: `5px solid ${isBothCorrect ? '#4f9a63' : '#e8a33d'}`,
+            border: `1px solid ${isBothCorrect ? '#c6e6cd' : '#f4debe'}`,
+            padding: '16px 20px',
+            borderRadius: '14px',
+            fontSize: '0.92rem',
+            lineHeight: '1.55',
+            color: isBothCorrect ? '#2f6564' : '#8c5914',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            <div>
+              <strong style={{ fontSize: '1rem', display: 'block', marginBottom: '4px' }}>
+                {isBothCorrect ? "🎯 Correct! You Nailed It!" : "💡 Common Newbie Misconception:"}
+              </strong>
+              <p style={{ margin: 0 }}>
+                {isBothCorrect ? (
+                  mode === 'duplicate'
+                    ? "Exactly right! Every single call to deepcopy() forces Python to make a physical 20 GB duplicate in RAM. When 1,000 students attempt to allocate 20,000 GB, our 100 GB server will instantly crash! Click below to see the disaster unfold in the live lab."
+                    : "Exactly right! In Python, '=' doesn't duplicate anything — it simply hands out a sticky-note reference pointer to the original noticeboard. All 1,000 students share the single 20 GB board without using extra RAM!"
+                ) : (
+                  mode === 'duplicate'
+                    ? "Almost everyone thinks Python would automatically share or compress data — but deepcopy() literally creates full 20 GB duplicates! And 1,000 clones × 20 GB is 20,000 GB, which blows right past our 100 GB server limit!"
+                    : "Unlike in some languages where variables hold separate copies, Python variables are just sticky-note labels pointing to existing objects! It won't clone 20 GB for each student."
+                )}
+              </p>
+            </div>
+
+            {isBothCorrect ? (
+              <button
+                type="button"
+                onClick={() => {
+                  unlockAudio();
+                  playPop();
+                  setPrediction({ choice: mode, isCorrect: true });
+                }}
+                className="btn primary"
+                style={{
+                  alignSelf: 'flex-start',
+                  background: 'linear-gradient(135deg, #FA994F, #EB8975)',
+                  border: 'none',
+                  color: '#ffffff',
+                  padding: '10px 22px',
+                  borderRadius: '999px',
+                  fontWeight: 700,
+                  fontSize: '0.92rem',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(235, 137, 117, 0.4)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <span>🚀</span> Launch Live Simulation & RAM Lab →
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  unlockAudio();
+                  playPop();
+                  setQ1Choice(null);
+                  setQ2Choice(null);
+                }}
+                style={{
+                  alignSelf: 'flex-start',
+                  background: '#ffffff',
+                  border: '1px solid #e8a33d',
+                  color: '#8c5914',
+                  padding: '7px 18px',
+                  borderRadius: '999px',
+                  fontSize: '0.84rem',
+                  cursor: 'pointer',
+                  fontWeight: 700,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <span>🔄</span> Revise Answers
+              </button>
+            )}
+          </div>
+        ) : (
+          <div style={{
+            background: '#faf6ee',
+            border: '1px dashed #e4dcc8',
+            borderRadius: '12px',
+            padding: '12px 16px',
+            color: '#7c7365',
+            fontSize: '0.86rem',
+            textAlign: 'center'
+          }}>
+            👉 Select your answers for <strong>Question 1</strong> and <strong>Question 2</strong> above.
+          </div>
         )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="level-container level1-light-theme">
+      <div className="story-panel glass-panel">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <h2 style={{ margin: 0, fontFamily: '"Fraunces", Georgia, serif', color: '#2f6564' }}>Code Execution</h2>
+        </div>
 
         {mode === 'duplicate' ? (
-          <div style={{ background: 'rgba(239, 68, 68, 0.1)', borderLeft: '4px solid var(--danger)', padding: '12px', marginTop: '16px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong>Code execution: Deep Copy</strong>
-              <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>💡 Click any line to see purpose</span>
+          <div style={{ background: '#fdfbf7', borderLeft: '4px solid #e8a33d', border: '1.5px solid #e4dcc8', padding: '14px', marginTop: '16px', borderRadius: '14px' }}>
+            <div>
+              <strong style={{ color: '#2b2b2b', fontFamily: '"Fraunces", Georgia, serif', fontSize: '0.95rem' }}>Code Execution: Deep Copy</strong>
             </div>
-            <pre style={{ marginTop: '8px', fontFamily: 'monospace', background: '#000', padding: '10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              <div onClick={() => selectLine(0)} style={{ ...getLineStyle(0), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 0 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(0).background }}>import copy</div>
-              <div onClick={() => selectLine(1)} style={{ ...getLineStyle(1), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 1 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(1).background }}>def distribute(announcement):</div>
-              <div onClick={() => selectLine(2)} style={{ ...getLineStyle(2), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 2 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(2).background }}>    students = []</div>
-              <div onClick={() => selectLine(3)} style={{ ...getLineStyle(3), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 3 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(3).background }}>    for i in range(1000):</div>
-              <div style={{ color: '#ef4444', padding: '2px 4px' }}>        # DANGER: Creates a massive duplicate in RAM</div>
+            <pre style={{ marginTop: '8px', fontFamily: '"SFMono-Regular", Consolas, monospace', background: '#ffffff', border: '1px solid #e4dcc8', color: '#2b2b2b', padding: '12px', borderRadius: '12px', fontSize: '0.85rem' }}>
+              <div onClick={() => selectLine(0)} style={{ ...getLineStyle(0), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(0) }}>import copy</div>
+              <div onClick={() => selectLine(1)} style={{ ...getLineStyle(1), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(1) }}>def distribute(announcement):</div>
+              <div onClick={() => selectLine(2)} style={{ ...getLineStyle(2), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(2) }}>    students = []</div>
+              <div onClick={() => selectLine(3)} style={{ ...getLineStyle(3), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(3) }}>    for i in range(1000):</div>
+              <div style={{ color: '#b45309', padding: '2px 4px', fontWeight: 600 }}>        # DANGER: Creates a massive duplicate in RAM</div>
 
-              <div onClick={() => selectLine(4)} style={{ ...getLineStyle(4), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 4 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(4).background }}>
+              <div onClick={() => selectLine(4)} style={{ ...getLineStyle(4), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(4) }}>
                 {`        copy_obj = copy.deepcopy(announcement)`}
               </div>
-              <div onClick={() => selectLine(5)} style={{ ...getLineStyle(5), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 5 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(5).background }}>        students.append(copy_obj)</div>
-              <div onClick={() => selectLine(6)} style={{ ...getLineStyle(6), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 6 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(6).background }}>    return students</div>
-              <div onClick={() => selectLine(7)} style={{ ...getLineStyle(7), marginTop: '8px', cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 7 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(7).background }}>announcement = ["Exam Date", "Room 101"]</div>
-              <div onClick={() => selectLine(8)} style={{ ...getLineStyle(8), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 8 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(8).background }}>distribute(announcement)</div>
+              <div onClick={() => selectLine(5)} style={{ ...getLineStyle(5), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(5) }}>        students.append(copy_obj)</div>
+              <div onClick={() => selectLine(6)} style={{ ...getLineStyle(6), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(6) }}>    return students</div>
+              <div onClick={() => selectLine(7)} style={{ ...getLineStyle(7), marginTop: '8px', cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(7) }}>announcement = ["Exam Date", "Room 101"]</div>
+              <div onClick={() => selectLine(8)} style={{ ...getLineStyle(8), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(8) }}>distribute(announcement)</div>
             </pre>
 
             {/* Purpose shows ONLY when clicked on a line */}
             {renderAnimatedExplanation(true, copyLineExplanations)}
           </div>
         ) : (
-          <div style={{ background: 'rgba(16, 185, 129, 0.1)', borderLeft: '4px solid var(--success)', padding: '12px', marginTop: '16px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong>Optimized execution: Pointers</strong>
-              <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>💡 Click any line to see purpose</span>
+          <div style={{ background: '#e9f4ec', borderLeft: '4px solid #4f9a63', border: '1px solid #c6e6cd', padding: '14px', marginTop: '16px', borderRadius: '14px' }}>
+            <div>
+              <strong style={{ color: '#2b2b2b', fontFamily: '"Fraunces", Georgia, serif', fontSize: '0.95rem' }}>Optimized Execution: Shared Pointers</strong>
             </div>
-            <pre style={{ marginTop: '8px', fontFamily: 'monospace', background: '#000', padding: '10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              <div onClick={() => selectLine(1)} style={{ ...getLineStyle(1), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 1 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(1).background }}>def distribute(announcement):</div>
-              <div onClick={() => selectLine(2)} style={{ ...getLineStyle(2), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 2 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(2).background }}>    students = []</div>
-              <div onClick={() => selectLine(3)} style={{ ...getLineStyle(3), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 3 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(3).background }}>    for i in range(1000):</div>
-              <div style={{ color: '#10b981', padding: '2px 4px' }}>        # SUCCESS: Creates a lightweight reference</div>
+            <pre style={{ marginTop: '8px', fontFamily: '"SFMono-Regular", Consolas, monospace', background: '#ffffff', border: '1px solid #e4dcc8', color: '#2b2b2b', padding: '12px', borderRadius: '12px', fontSize: '0.85rem' }}>
+              <div onClick={() => selectLine(1)} style={{ ...getLineStyle(1), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(1) }}>def distribute(announcement):</div>
+              <div onClick={() => selectLine(2)} style={{ ...getLineStyle(2), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(2) }}>    students = []</div>
+              <div onClick={() => selectLine(3)} style={{ ...getLineStyle(3), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(3) }}>    for i in range(1000):</div>
+              <div style={{ color: '#4f9a63', padding: '2px 4px', fontWeight: 600 }}>        # SUCCESS: Creates a lightweight reference</div>
 
-              <div onClick={() => selectLine(4)} style={{ ...getLineStyle(4), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 4 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(4).background }}>
+              <div onClick={() => selectLine(4)} style={{ ...getLineStyle(4), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(4) }}>
                 {`        student_pointer = announcement`}
               </div>
-              <div onClick={() => selectLine(5)} style={{ ...getLineStyle(5), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 5 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(5).background }}>        students.append(student_pointer)</div>
-              <div onClick={() => selectLine(6)} style={{ ...getLineStyle(6), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 6 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(6).background }}>    return students</div>
-              <div onClick={() => selectLine(7)} style={{ ...getLineStyle(7), marginTop: '8px', cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 7 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(7).background }}>announcement = ["Exam Date", "Room 101"]</div>
-              <div onClick={() => selectLine(8)} style={{ ...getLineStyle(8), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: selectedLine === 8 ? 'rgba(59, 130, 246, 0.3)' : getLineStyle(8).background }}>distribute(announcement)</div>
+              <div onClick={() => selectLine(5)} style={{ ...getLineStyle(5), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(5) }}>        students.append(student_pointer)</div>
+              <div onClick={() => selectLine(6)} style={{ ...getLineStyle(6), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(6) }}>    return students</div>
+              <div onClick={() => selectLine(7)} style={{ ...getLineStyle(7), marginTop: '8px', cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(7) }}>announcement = ["Exam Date", "Room 101"]</div>
+              <div onClick={() => selectLine(8)} style={{ ...getLineStyle(8), cursor: 'pointer', padding: '2px 4px', borderRadius: '3px', background: getCodeLineBg(8) }}>distribute(announcement)</div>
             </pre>
 
             {/* Purpose shows ONLY when clicked on a line */}
@@ -920,12 +1331,26 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
 
         <div style={{ marginTop: 'auto', display: 'flex', gap: '12px', flexDirection: 'column' }}>
           {hasCrashed && mode === 'duplicate' && (
-            <button className="btn warning" style={{ background: '#f59e0b', color: '#000', fontWeight: 'bold' }} onClick={() => setStoryStep(3)}>
+            <button className="btn" style={{ background: '#e8a33d', border: 'none', color: '#2b2b2b', fontWeight: 'bold', borderRadius: '999px', padding: '12px 22px' }} onClick={() => setStoryStep(3)}>
               View the Better Approach <ArrowRight size={18} style={{ marginLeft: '8px' }} />
             </button>
           )}
           {mode === 'pointer' && (
-            <button className="btn" style={{ background: 'var(--accent)', borderColor: 'var(--accent)', color: 'black' }} onClick={() => setShowQuiz(true)}>
+            <button
+              type="button"
+              style={{
+                background: 'linear-gradient(135deg, #FA994F 0%, #c4682c 100%)',
+                border: 'none',
+                color: '#ffffff',
+                fontWeight: 700,
+                fontSize: '0.94rem',
+                borderRadius: '999px',
+                padding: '12px 24px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 14px rgba(250, 153, 79, 0.3)'
+              }}
+              onClick={() => setShowQuiz(true)}
+            >
               Check Knowledge
             </button>
           )}
@@ -933,267 +1358,284 @@ const Level1 = ({ onCrash, onPass, RamBar }) => {
       </div>
 
       <div className="interaction-panel glass-panel" style={{ justifyContent: 'flex-start' }}>
-        {/* Right Side Heading */}
-        <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', paddingBottom: '12px', marginBottom: '10px' }}>
-          <h2 style={{ fontSize: '1.4rem', color: '#60a5fa', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>⚡</span> Memory & RAM Allocation Lab
-          </h2>
-          <span style={{ fontSize: '0.8rem', color: '#94a3b8', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '4px' }}>
-            Live Simulation
-          </span>
-        </div>
+        {!prediction?.isCorrect ? (
+          renderPreFlightCard()
+        ) : (
+          <>
+            {/* Right Side Heading */}
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #e4dcc8', paddingBottom: '12px', marginBottom: '10px' }}>
+              <h2 style={{ fontSize: '1.4rem', fontFamily: '"Fraunces", Georgia, serif', color: '#2f6564', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span>⚡</span> Memory & RAM Allocation Lab
+              </h2>
+              <button
+                onClick={handleDrag}
+                disabled={isBuilding || showQuiz}
+                style={{
+                  background: isBuilding
+                    ? '#b0a999'
+                    : 'linear-gradient(135deg, #e67635 0%, #cf5717 100%)',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '8px 20px',
+                  borderRadius: '999px',
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: (isBuilding || showQuiz) ? 'not-allowed' : 'pointer',
+                  boxShadow: isBuilding ? 'none' : '0 4px 14px rgba(230, 118, 53, 0.35)',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                  letterSpacing: '0.01em'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isBuilding && !showQuiz) {
+                    e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(230, 118, 53, 0.45)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.boxShadow = isBuilding ? 'none' : '0 4px 14px rgba(230, 118, 53, 0.35)';
+                }}
+              >
+                {isBuilding ? (
+                  <>
+                    <div className="spinner" style={{ width: '13px', height: '13px', border: '2px solid #ffffff', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                    <span>Simulating...</span>
+                  </>
+                ) : (
+                  <>
+                    <Play size={15} fill="#ffffff" />
+                    <span>Run Simulation</span>
+                  </>
+                )}
+              </button>
+            </div>
 
-        <RamBar usage={ram} />
-
-        <div style={{ display: 'flex', gap: '30px', marginTop: '10px', justifyContent: 'center' }}>
-          <button
-            className="btn primary"
-            onClick={prediction?.isCorrect ? handleDrag : undefined}
-            disabled={!prediction?.isCorrect || isBuilding || showQuiz}
-            style={{
-              opacity: (!prediction?.isCorrect || isBuilding || showQuiz) ? 0.5 : 1,
-              cursor: (!prediction?.isCorrect || isBuilding || showQuiz) ? 'not-allowed' : 'pointer',
+            {/* Visual RAM Floor (Animated RAM Area - Top) */}
+            <div style={{
+              width: '100%',
+              marginTop: '10px',
+              position: 'relative',
               display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            {isBuilding ? (
-              <><div className="spinner" style={{ width: '16px', height: '16px', border: '2px solid #fff', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div> Processing...</>
-            ) : (
-              <><Play size={18} /> Run Program</>
-            )}
-          </button>
-        </div>
+              flexDirection: 'column',
+              border: '2px dashed #e4dcc8',
+              borderRadius: '14px',
+              minHeight: '270px',
+              background: '#faf6ee',
+              overflow: 'hidden'
+            }}>
 
-        {/* Calculation Bar */}
-        <div style={{ background: '#1e293b', padding: '15px', borderRadius: '8px', marginTop: '20px', width: '100%', border: '1px solid #475569', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ fontSize: '1.2rem', marginBottom: '10px' }}>
-            <strong>RAM Capacity: 100 GB</strong>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', fontSize: '1.1rem', fontFamily: 'monospace' }}>
-            <span style={{ color: '#3b82f6' }}>20 GB (Original)</span>
-            <span>+</span>
-            <span style={{ color: mode === 'duplicate' ? '#ef4444' : '#10b981' }}>
-              {mode === 'duplicate' ? `${crates.length * 20} GB (Photocopies)` : `${(stickyNotes.length * 0.01).toFixed(2)} GB (References)`}
-            </span>
-            <span>=</span>
-            <span style={{ fontWeight: 'bold', color: ram >= 100 ? '#ef4444' : '#f8fafc' }}>
-              {ram.toFixed(2)} GB Total
-            </span>
-          </div>
-        </div>
+              {/* Upper Line: Real-Time RAM Percentage & Dynamic Progress Meter */}
+              <div style={{
+                width: '100%',
+                borderBottom: '1.5px solid #e4dcc8',
+                background: '#f6f0e2',
+                padding: '10px 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px',
+                boxSizing: 'border-box'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Cpu size={16} color="#2f6564" />
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#2f6564' }}>
+                      Physical RAM Allocation (100 GB)
+                    </span>
+                  </div>
+                  <span style={{
+                    fontSize: '0.82rem',
+                    fontWeight: 800,
+                    fontFamily: '"SFMono-Regular", Consolas, monospace',
+                    color: ram >= 100 ? '#c25b4a' : ram > 50 ? '#d97706' : '#2f6564',
+                    background: ram >= 100 ? '#fbeae7' : ram > 50 ? '#fdf3e2' : '#eaf2ee',
+                    padding: '2px 10px',
+                    borderRadius: '999px',
+                    border: `1px solid ${ram >= 100 ? '#c25b4a' : ram > 50 ? '#e8a33d' : '#3a7d7c'}`,
+                    transition: 'all 0.3s ease'
+                  }}>
+                    RAM: {ram.toFixed(0)}% ({ram.toFixed(2)} GB / 100 GB)
+                  </span>
+                </div>
 
-        {/* Visual RAM Floor */}
-        <div style={{ width: '100%', marginTop: '20px', position: 'relative', display: 'flex', border: '2px dashed #475569', borderRadius: '8px', minHeight: '250px', background: 'rgba(0,0,0,0.2)' }}>
+                {/* Top Integrated Progress Bar Line */}
+                <div style={{
+                  width: '100%',
+                  height: '7px',
+                  background: '#e6ded0',
+                  borderRadius: '999px',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    height: '100%',
+                    width: `${Math.min(ram, 100)}%`,
+                    background: ram >= 100
+                      ? 'linear-gradient(90deg, #e77338, #c25b4a)'
+                      : ram > 50
+                        ? 'linear-gradient(90deg, #3a7d7c, #e8a33d)'
+                        : 'linear-gradient(90deg, #2f6564, #4f9a63)',
+                    borderRadius: '999px',
+                    transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                    boxShadow: ram >= 100 ? '0 0 10px rgba(194, 91, 74, 0.7)' : 'none'
+                  }} />
+                </div>
+              </div>
 
-          {/* Master Notice Board Zone */}
-          <div style={{ width: '30%', borderRight: '2px dashed #475569', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-            <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginBottom: '10px' }}>Original Announcement</p>
-            <div style={{ background: '#8B4513', padding: '15px', border: '5px solid #5C4033', borderRadius: '8px', color: '#fff', textAlign: 'center', width: '120px', zIndex: 10 }}>
-              <h3 style={{ margin: 0, color: '#fcd34d', fontSize: '0.8rem' }}>NOTICE BOARD</h3>
-              <div style={{ background: '#fff', color: '#000', padding: '5px', marginTop: '10px', fontSize: '0.9rem', fontWeight: 'bold' }}>
-                [10, 20, 30]
+              {/* RAM Floor Content: Master Notice Board + Available Memory */}
+              <div style={{ display: 'flex', flex: 1, width: '100%', minHeight: '220px' }}>
+                {/* Master Notice Board Zone */}
+                <div style={{ width: '30%', borderRight: '2px dashed #e4dcc8', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px', boxSizing: 'border-box' }}>
+                  <p style={{ color: '#5b5648', fontSize: '0.8rem', marginBottom: '8px', fontWeight: 600 }}>Original Announcement</p>
+                  <div style={{ background: '#fdf3e2', padding: '12px', border: '2px solid #e8a33d', borderRadius: '12px', textAlign: 'center', width: '125px', zIndex: 10, boxShadow: '0 2px 0 #e4dcc8' }}>
+                    <h3 style={{ margin: 0, color: '#2b2b2b', fontFamily: '"Fraunces", serif', fontSize: '0.82rem' }}>NOTICE BOARD</h3>
+                    <div style={{ background: '#ffffff', color: '#2b2b2b', border: '1px solid #e4dcc8', padding: '6px', marginTop: '8px', fontSize: '0.85rem', fontWeight: 'bold', borderRadius: '6px' }}>
+                      [10, 20, 30]
+                    </div>
+                  </div>
+                  <span style={{ marginTop: '8px', background: '#eaf2ee', color: '#2f6564', border: '1px solid #3a7d7c', padding: '2px 9px', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 700 }}>Location: 1000</span>
+                  <span style={{ marginTop: '4px', color: '#5b5648', fontSize: '0.7rem' }}>Size: 20 GB</span>
+                </div>
+
+                {/* New Items Zone (Where crates / sticky notes animate in) */}
+                <div style={{ width: '70%', padding: '12px 16px', display: 'flex', flexDirection: 'column', position: 'relative', boxSizing: 'border-box' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                    <p style={{ margin: 0, color: '#5b5648', fontSize: '0.78rem', fontWeight: 600 }}>Available Memory</p>
+                  </div>
+
+                  {mode === 'duplicate' ? (
+                    /* 2x2 Grid covering 100% of Available Memory when all 4 copies are added */
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(2, 1fr)',
+                      gridTemplateRows: 'repeat(2, 1fr)',
+                      gap: '10px',
+                      flex: 1,
+                      width: '100%',
+                      minHeight: '190px'
+                    }}>
+                      {crates.map((c) => (
+                        <div
+                          key={c.id}
+                          style={{
+                            background: '#ffffff',
+                            border: '1.5px solid #e8a33d',
+                            borderRadius: '12px',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '8px',
+                            animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                          }}
+                        >
+                          <div style={{
+                            background: '#fdfbf5',
+                            border: '1px solid #e4dcc8',
+                            padding: '6px 14px',
+                            borderRadius: '8px',
+                            fontSize: '0.84rem',
+                            fontWeight: 700,
+                            color: '#2b2b2b',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px'
+                          }}>
+                            <span>📄</span> [10, 20, 30]
+                          </div>
+                          <span style={{
+                            marginTop: '6px',
+                            background: '#fbeae7',
+                            color: '#c25b4a',
+                            border: '1px solid #c25b4a',
+                            padding: '2px 10px',
+                            borderRadius: '999px',
+                            fontSize: '0.72rem',
+                            fontWeight: 700
+                          }}>
+                            20 GB
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: '12px',
+                      alignContent: 'flex-start',
+                      flex: 1,
+                      paddingTop: '6px'
+                    }}>
+                      {stickyNotes.map((n, index) => (
+                        <div key={n.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', animation: 'popIn 0.3s' }}>
+                          {index === 0 && (
+                            <div style={{ width: '26px', height: '2px', background: '#4f9a63', position: 'relative', animation: 'fadeOutArrow 2s forwards' }}>
+                              <div style={{ position: 'absolute', left: 0, top: '-4px', width: '0', height: '0', borderTop: '5px solid transparent', borderBottom: '5px solid transparent', borderRight: '8px solid #4f9a63' }}></div>
+                            </div>
+                          )}
+                          <div className="sticky-note" style={{ background: '#fdf3e2', color: '#2b2b2b', border: '1px solid #e8a33d', padding: '6px 10px', borderRadius: '8px', fontSize: '0.78rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 0 #e4dcc8' }}>
+                            <strong>Student {index + 1}</strong>
+                            <span>➔ 1000</span>
+                            <span style={{ fontSize: '0.55rem', marginTop: '2px', color: '#5b5648' }}>0.01 GB</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-            <span style={{ marginTop: '10px', background: '#3b82f6', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>Location: 1000</span>
-            <span style={{ marginTop: '5px', color: '#94a3b8', fontSize: '0.7rem' }}>Size: 20 GB</span>
-          </div>
 
-          {/* New Items Zone */}
-          <div style={{ width: '70%', padding: '20px', display: 'flex', flexWrap: 'wrap', gap: '20px', alignContent: 'flex-start', position: 'relative' }}>
-            <p style={{ position: 'absolute', top: 5, left: 10, color: '#94a3b8', fontSize: '0.8rem' }}>Available Memory</p>
-
-            {crates.map((c) => (
-              <div key={c.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ background: '#fff', border: '1px solid #ccc', padding: '10px', color: '#000', margin: '5px', borderRadius: '4px', boxShadow: '2px 2px 5px rgba(0,0,0,0.5)', animation: 'popIn 0.3s', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                  📄 [10, 20, 30]
-                </div>
-                <span style={{ marginTop: '5px', background: '#ef4444', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>20 GB</span>
+            {/* Calculation Bar */}
+            <div style={{ background: '#fdfbf5', padding: '14px 16px', borderRadius: '14px', marginTop: '14px', width: '100%', border: '1px solid #e4dcc8', boxShadow: '0 2px 0 #e4dcc8', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ fontSize: '1.05rem', fontFamily: '"Fraunces", serif', marginBottom: '8px', color: '#2b2b2b' }}>
+                <strong>RAM Capacity: 100 GB</strong>
               </div>
-            ))}
-
-            {stickyNotes.map((n, index) => (
-              <div key={n.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', animation: 'popIn 0.3s' }}>
-                {index === 0 && (
-                  <div style={{ width: '40px', height: '2px', background: '#10b981', position: 'relative', animation: 'fadeOutArrow 2s forwards' }}>
-                    <div style={{ position: 'absolute', left: 0, top: '-4px', width: '0', height: '0', borderTop: '5px solid transparent', borderBottom: '5px solid transparent', borderRight: '10px solid #10b981' }}></div>
-                  </div>
-                )}
-                <div className="sticky-note" style={{ background: '#fef08a', color: '#000', padding: '5px', borderRadius: '4px', fontSize: '0.8rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <strong>Student {index + 1}</strong>
-                  <span>➔ 1000</span>
-                  <span style={{ fontSize: '0.5rem', marginTop: '2px' }}>0.01 GB</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Simple Memory Box Inspector */}
-        <div style={{
-          width: '100%',
-          marginTop: '18px',
-          background: 'rgba(15, 23, 42, 0.85)',
-          border: '1px solid rgba(59, 130, 246, 0.3)',
-          borderRadius: '12px',
-          padding: '16px',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-          position: 'relative'
-        }}>
-          {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.2rem' }}>📦</span>
-              <div>
-                <strong style={{ fontSize: '0.95rem', color: '#60a5fa', letterSpacing: '0.5px' }}>
-                  RAM Memory Box Tracker
-                </strong>
-                <span style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8' }}>
-                  See if students share the original memory box or clone duplicate boxes
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', fontSize: '0.98rem', fontFamily: '"SFMono-Regular", Consolas, monospace' }}>
+                <span style={{ color: '#3a7d7c', fontWeight: 600 }}>20 GB (Original)</span>
+                <span style={{ color: '#5b5648' }}>+</span>
+                <span style={{ color: mode === 'duplicate' ? '#c25b4a' : '#4f9a63', fontWeight: 600 }}>
+                  {mode === 'duplicate' ? `${crates.length * 20} GB (Photocopies)` : `${(stickyNotes.length * 0.01).toFixed(2)} GB (References)`}
+                </span>
+                <span style={{ color: '#5b5648' }}>=</span>
+                <span style={{ fontWeight: 'bold', color: ram >= 100 ? '#c25b4a' : '#2b2b2b' }}>
+                  {ram.toFixed(2)} GB Total
                 </span>
               </div>
             </div>
-            <button
-              onClick={() => setShowHeapInspector(!showHeapInspector)}
-              style={{
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                color: '#cbd5e1',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                fontSize: '0.75rem',
-                cursor: 'pointer',
-                fontWeight: 600
-              }}
-            >
-              {showHeapInspector ? "Hide Tracker ▲" : "Show Tracker ▼"}
-            </button>
-          </div>
 
-          {showHeapInspector && (
-            <>
-              {/* Master Object Card */}
-              <div style={{
-                background: 'rgba(30, 41, 59, 0.7)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '8px',
-                padding: '10px 14px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '8px',
-                marginBottom: '12px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#3b82f6', boxShadow: '0 0 8px #3b82f6' }} />
-                  <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.88rem', color: '#f8fafc' }}>
-                    announcement
-                  </span>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>[Original Noticeboard]</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Stored in:</span>
-                  <span style={{ background: '#000', color: '#38bdf8', padding: '3px 8px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 700, border: '1px solid rgba(56, 189, 248, 0.3)' }}>
-                    📦 Memory Box #1
-                  </span>
-                  <span style={{ fontSize: '0.75rem', color: '#60a5fa', background: 'rgba(59, 130, 246, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
-                    20 GB
-                  </span>
-                </div>
-              </div>
-
-              {/* Student Allocations Live Table */}
-              <div style={{ maxHeight: '180px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '12px', paddingRight: '4px' }}>
-                {mode === 'duplicate' ? (
-                  crates.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '16px', color: '#64748b', fontSize: '0.82rem', fontStyle: 'italic' }}>
-                      Click 'Run Program' above to see duplicate boxes get created in RAM.
-                    </div>
-                  ) : (
-                    crates.map((c, i) => (
-                      <div key={c.id} style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        background: 'rgba(239, 68, 68, 0.08)',
-                        border: '1px solid rgba(239, 68, 68, 0.25)',
-                        borderRadius: '6px',
-                        padding: '6px 12px',
-                        fontSize: '0.8rem'
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span>📄</span>
-                          <span style={{ color: '#f8fafc', fontWeight: 600 }}>Student #{i + 1}</span>
-                          <span style={{ color: '#94a3b8', fontSize: '0.72rem' }}>(deepcopy)</span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ color: '#ef4444', fontWeight: 700, fontFamily: 'monospace' }}>📦 New Box #{i + 2}</span>
-                          <span style={{ fontSize: '0.72rem', color: '#f87171', background: 'rgba(239, 68, 68, 0.2)', padding: '1px 6px', borderRadius: '4px' }}>
-                            Separate Copy (+20 GB) ❌
-                          </span>
-                        </div>
-                      </div>
-                    ))
-                  )
-                ) : (
-                  stickyNotes.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '16px', color: '#64748b', fontSize: '0.82rem', fontStyle: 'italic' }}>
-                      Click 'Run Program' above to see how references share the original box.
-                    </div>
-                  ) : (
-                    stickyNotes.map((s, i) => (
-                      <div key={s.id} style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        background: 'rgba(16, 185, 129, 0.08)',
-                        border: '1px solid rgba(16, 185, 129, 0.25)',
-                        borderRadius: '6px',
-                        padding: '6px 12px',
-                        fontSize: '0.8rem'
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span>⚡</span>
-                          <span style={{ color: '#f8fafc', fontWeight: 600 }}>Student #{i + 1}</span>
-                          <span style={{ color: '#94a3b8', fontSize: '0.72rem' }}>(reference pointer)</span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ color: '#10b981', fontWeight: 700, fontFamily: 'monospace' }}>➔ Points to Box #1</span>
-                          <span style={{ fontSize: '0.72rem', color: '#34d399', background: 'rgba(16, 185, 129, 0.2)', padding: '1px 6px', borderRadius: '4px' }}>
-                            Shared Original (0 extra RAM) ✅
-                          </span>
-                        </div>
-                      </div>
-                    ))
-                  )
-                )}
-              </div>
-
-              {/* Memory Verdict Strip */}
-              <div style={{
-                background: mode === 'duplicate' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-                border: `1px solid ${mode === 'duplicate' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(16, 185, 129, 0.4)'}`,
-                borderRadius: '8px',
-                padding: '8px 12px',
-                fontSize: '0.82rem',
-                color: mode === 'duplicate' ? '#fca5a5' : '#86efac',
-                fontWeight: 600
-              }}>
-                {mode === 'duplicate'
-                  ? `🛑 Memory Bloat: ${crates.length} separate boxes created in RAM (Wasted: ${crates.length * 20} GB)!`
-                  : `✅ Zero Memory Waste: All ${stickyNotes.length} students share the single original Memory Box #1!`
-                }
-              </div>
-            </>
-          )}
-        </div>
+            {/* Memory Verdict / Bloat Strip */}
+            <div style={{
+              width: '100%',
+              marginTop: '12px',
+              background: mode === 'duplicate' ? '#fbeae7' : '#e9f4ec',
+              border: mode === 'duplicate' ? '1px solid #c25b4a' : '1px solid #4f9a63',
+              borderRadius: '12px',
+              padding: '10px 16px',
+              fontSize: '0.84rem',
+              color: mode === 'duplicate' ? '#c25b4a' : '#4f9a63',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 0 #e4dcc8',
+              textAlign: 'center'
+            }}>
+              {mode === 'duplicate'
+                ? `🛑 Memory Bloat: ${crates.length} separate boxes created in RAM (Wasted: ${crates.length * 20} GB)!`
+                : `✅ Zero Memory Waste: All ${stickyNotes.length} students share the single original Memory Box #1!`
+              }
+            </div>
+          </>
+        )}
       </div>
 
       {/* Quiz Modal Overlay */}
       {showQuiz && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000, backdropFilter: 'blur(10px)', padding: '16px' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(36, 30, 26, 0.78)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000, backdropFilter: 'blur(10px)', padding: '16px' }}>
           <div style={{ width: '920px', maxWidth: '96%', maxHeight: '92vh', overflowY: 'auto' }}>
             <Quiz questions={questions} codeChallenge={level1CodeChallenge} onPass={onPass} onClose={() => setShowQuiz(false)} />
           </div>

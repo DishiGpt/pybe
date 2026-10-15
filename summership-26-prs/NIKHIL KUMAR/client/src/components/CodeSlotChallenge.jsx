@@ -124,27 +124,26 @@ const CodeSlotChallenge = ({
 
   return (
     <div style={{
-      background: 'rgba(15, 23, 42, 0.96)',
-      border: '1px solid rgba(59, 130, 246, 0.35)',
-      borderRadius: '16px',
-      padding: '24px',
-      boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(59, 130, 246, 0.15)',
-      backdropFilter: 'blur(16px)',
+      background: '#fffdfa',
+      border: '1.5px solid #e4dcc8',
+      borderRadius: '18px',
+      padding: '26px',
+      boxShadow: '0 12px 36px rgba(43, 30, 20, 0.08)',
       width: '100%',
       maxWidth: '920px',
       margin: '0 auto',
       position: 'relative'
     }}>
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', paddingBottom: '16px', marginBottom: '18px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #e4dcc8', paddingBottom: '16px', marginBottom: '18px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ fontSize: '1.5rem' }}>🧩</span>
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.35rem', color: '#60a5fa', fontWeight: 800, letterSpacing: '-0.3px' }}>
+              <h2 style={{ margin: 0, fontSize: '1.35rem', fontFamily: '"Fraunces", Georgia, serif', color: '#2b2b2b', fontWeight: 800, letterSpacing: '-0.2px' }}>
                 Fix the Bug: Code Slot Challenge
               </h2>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+              <span style={{ fontSize: '0.8rem', color: '#7c7365' }}>
                 {subtitle}
               </span>
             </div>
@@ -154,17 +153,20 @@ const CodeSlotChallenge = ({
         {onClose && (
           <button
             onClick={onClose}
+            type="button"
             style={{
-              background: 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              borderRadius: '8px',
-              color: '#94a3b8',
+              background: '#ffffff',
+              border: '1.5px solid #e4dcc8',
+              borderRadius: '999px',
+              color: '#5b5648',
               cursor: 'pointer',
-              padding: '6px 12px',
+              padding: '6px 14px',
               fontSize: '0.8rem',
+              fontWeight: 600,
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              transition: 'all 0.15s ease'
             }}
           >
             <X size={16} /> Back to Lab
@@ -174,16 +176,16 @@ const CodeSlotChallenge = ({
 
       {/* Challenge Mission Brief */}
       <div style={{
-        background: 'rgba(30, 41, 59, 0.6)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        borderRadius: '10px',
-        padding: '12px 16px',
+        background: '#fdf3e2',
+        border: '1.5px solid #e8a33d',
+        borderRadius: '12px',
+        padding: '12px 18px',
         marginBottom: '20px',
         fontSize: '0.88rem',
-        color: '#cbd5e1',
-        lineHeight: '1.5'
+        color: '#634316',
+        lineHeight: '1.55'
       }}>
-        <strong style={{ color: '#fcd34d' }}>Mission Brief: </strong>
+        <strong style={{ color: '#8c5914', fontWeight: 800 }}>Mission Brief: </strong>
         {description}
       </div>
 
@@ -191,18 +193,18 @@ const CodeSlotChallenge = ({
         {/* Left Column: Code Snippet with Drop Slot */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Code size={16} color="#60a5fa" /> Target Python Script:
+            <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#2b2b2b', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Code size={16} color="#FA994F" /> Target Python Script:
             </span>
-            <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
+            <span style={{ fontSize: '0.74rem', color: '#7c7365', fontWeight: 600 }}>
               Line {slotLineNumber} needs patching
             </span>
           </div>
 
           <div style={{
-            background: '#050914',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            borderRadius: '10px',
+            background: '#241e1a',
+            border: '1.5px solid #3d352e',
+            borderRadius: '12px',
             padding: '16px',
             fontFamily: 'monospace',
             fontSize: '0.86rem',
@@ -211,8 +213,8 @@ const CodeSlotChallenge = ({
             {/* Preceding Lines */}
             {codeLinesBefore.map((line, idx) => (
               <div key={idx} style={{ color: '#94a3b8', display: 'flex', gap: '12px' }}>
-                <span style={{ color: '#475569', userSelect: 'none', width: '18px', textAlign: 'right' }}>{idx + 1}</span>
-                <span style={{ color: '#cbd5e1' }}>{line}</span>
+                <span style={{ color: '#8c7d70', userSelect: 'none', width: '18px', textAlign: 'right' }}>{idx + 1}</span>
+                <span style={{ color: '#f4efe4' }}>{line}</span>
               </div>
             ))}
 
@@ -226,15 +228,15 @@ const CodeSlotChallenge = ({
                 padding: selectedOption ? '8px 12px' : '14px 12px',
                 borderRadius: '8px',
                 border: isDragOver
-                  ? '2px dashed #38bdf8'
+                  ? '2px dashed #FA994F'
                   : selectedOption
-                    ? (testResult?.isCorrect ? '2px solid #10b981' : testResult?.isCorrect === false ? '2px solid #ef4444' : '2px solid #3b82f6')
-                    : '2px dashed rgba(245, 158, 11, 0.6)',
+                    ? (testResult?.isCorrect ? '2px solid #4f9a63' : testResult?.isCorrect === false ? '2px solid #c25b4a' : '2px solid #FA994F')
+                    : '2px dashed #FA994F',
                 background: isDragOver
-                  ? 'rgba(56, 189, 248, 0.15)'
+                  ? 'rgba(250, 153, 79, 0.2)'
                   : selectedOption
-                    ? (testResult?.isCorrect ? 'rgba(16, 185, 129, 0.12)' : testResult?.isCorrect === false ? 'rgba(239, 68, 68, 0.12)' : 'rgba(59, 130, 246, 0.15)')
-                    : 'rgba(245, 158, 11, 0.08)',
+                    ? (testResult?.isCorrect ? 'rgba(79, 154, 99, 0.15)' : testResult?.isCorrect === false ? 'rgba(194, 91, 74, 0.15)' : 'rgba(250, 153, 79, 0.12)')
+                    : 'rgba(250, 153, 79, 0.08)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -243,11 +245,11 @@ const CodeSlotChallenge = ({
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
-                <span style={{ color: '#f59e0b', fontWeight: 800, width: '18px', textAlign: 'right' }}>{slotLineNumber}</span>
+                <span style={{ color: '#FA994F', fontWeight: 800, width: '18px', textAlign: 'right' }}>{slotLineNumber}</span>
                 {selectedOption ? (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                     <span style={{
-                      color: testResult?.isCorrect ? '#34d399' : testResult?.isCorrect === false ? '#f87171' : '#60a5fa',
+                      color: testResult?.isCorrect ? '#6ee7b7' : testResult?.isCorrect === false ? '#fca5a5' : '#fbd38d',
                       fontWeight: 700,
                       wordBreak: 'break-all'
                     }}>
@@ -255,11 +257,12 @@ const CodeSlotChallenge = ({
                     </span>
                     <button
                       onClick={handleRemoveOption}
+                      type="button"
                       title="Remove block from slot"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.1)',
+                        background: 'rgba(255, 255, 255, 0.15)',
                         border: 'none',
-                        color: '#cbd5e1',
+                        color: '#f4efe4',
                         borderRadius: '4px',
                         cursor: 'pointer',
                         padding: '2px 6px',
@@ -271,7 +274,7 @@ const CodeSlotChallenge = ({
                     </button>
                   </div>
                 ) : (
-                  <div style={{ color: '#fbbf24', fontStyle: 'italic', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ color: '#FA994F', fontStyle: 'italic', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
                     <span>📥</span>
                     <span>Drop replacement block here (or click block below)</span>
                   </div>
@@ -282,8 +285,8 @@ const CodeSlotChallenge = ({
             {/* Following Lines */}
             {codeLinesAfter.map((line, idx) => (
               <div key={idx} style={{ color: '#94a3b8', display: 'flex', gap: '12px' }}>
-                <span style={{ color: '#475569', userSelect: 'none', width: '18px', textAlign: 'right' }}>{slotLineNumber + 1 + idx}</span>
-                <span style={{ color: '#cbd5e1' }}>{line}</span>
+                <span style={{ color: '#8c7d70', userSelect: 'none', width: '18px', textAlign: 'right' }}>{slotLineNumber + 1 + idx}</span>
+                <span style={{ color: '#f4efe4' }}>{line}</span>
               </div>
             ))}
           </div>
@@ -293,18 +296,22 @@ const CodeSlotChallenge = ({
             <button
               onClick={handleRunPatch}
               disabled={!selectedOption || isRunning}
-              className="btn primary"
+              type="button"
               style={{
                 width: '100%',
-                padding: '12px',
-                fontSize: '0.95rem',
+                padding: '13px',
+                fontSize: '0.94rem',
                 fontWeight: 700,
-                opacity: (!selectedOption || isRunning) ? 0.5 : 1,
+                background: (!selectedOption || isRunning) ? '#f0ece0' : 'linear-gradient(135deg, #FA994F 0%, #c4682c 100%)',
+                color: (!selectedOption || isRunning) ? '#9e978a' : '#ffffff',
+                border: 'none',
+                borderRadius: '999px',
                 cursor: (!selectedOption || isRunning) ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px'
+                gap: '8px',
+                boxShadow: (!selectedOption || isRunning) ? 'none' : '0 4px 14px rgba(250, 153, 79, 0.3)'
               }}
             >
               {isRunning ? (
@@ -324,10 +331,10 @@ const CodeSlotChallenge = ({
         {/* Right Column: 3 Replacement Blocks & Test Results */}
         <div>
           <div style={{ marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#2b2b2b' }}>
               Select Replacement Block:
             </span>
-            <span style={{ display: 'block', fontSize: '0.72rem', color: '#64748b' }}>
+            <span style={{ display: 'block', fontSize: '0.74rem', color: '#7c7365' }}>
               Drag into slot or click to equip
             </span>
           </div>
@@ -342,32 +349,28 @@ const CodeSlotChallenge = ({
                   onDragStart={(e) => handleDragStart(e, opt.id)}
                   onClick={() => handleSelectOption(opt.id)}
                   style={{
-                    background: isEquipped
-                      ? 'rgba(59, 130, 246, 0.2)'
-                      : 'rgba(30, 41, 59, 0.8)',
-                    border: isEquipped
-                      ? '2px solid #3b82f6'
-                      : '1px solid rgba(255, 255, 255, 0.12)',
-                    borderRadius: '10px',
+                    background: isEquipped ? '#fff8f2' : '#ffffff',
+                    border: isEquipped ? '2px solid #FA994F' : '1.5px solid #e4dcc8',
+                    borderRadius: '12px',
                     padding: '12px 14px',
                     cursor: 'grab',
                     transition: 'all 0.18s ease',
-                    boxShadow: isEquipped ? '0 0 16px rgba(59, 130, 246, 0.3)' : 'none'
+                    boxShadow: isEquipped ? '0 4px 14px rgba(250, 153, 79, 0.22)' : '0 2px 6px rgba(0,0,0,0.02)'
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                     <span style={{
-                      fontSize: '0.7rem',
+                      fontSize: '0.72rem',
                       fontWeight: 700,
-                      color: '#94a3b8',
-                      background: 'rgba(255, 255, 255, 0.08)',
+                      color: '#7c4a2d',
+                      background: '#f4efe4',
                       padding: '2px 8px',
-                      borderRadius: '4px'
+                      borderRadius: '6px'
                     }}>
                       Option {String.fromCharCode(65 + i)} • {opt.tag}
                     </span>
                     {isEquipped && (
-                      <span style={{ fontSize: '0.72rem', color: '#38bdf8', fontWeight: 700 }}>
+                      <span style={{ fontSize: '0.74rem', color: '#FA994F', fontWeight: 700 }}>
                         ✓ Equipped in Slot
                       </span>
                     )}
@@ -375,11 +378,11 @@ const CodeSlotChallenge = ({
                   <div style={{
                     fontFamily: 'monospace',
                     fontSize: '0.82rem',
-                    color: isEquipped ? '#60a5fa' : '#f8fafc',
-                    background: 'rgba(0, 0, 0, 0.4)',
+                    color: isEquipped ? '#7c4a2d' : '#2b2b2b',
+                    background: '#faf6ee',
                     padding: '6px 10px',
                     borderRadius: '6px',
-                    border: '1px solid rgba(255, 255, 255, 0.06)'
+                    border: '1px solid #e4dcc8'
                   }}>
                     {opt.shortText}
                   </div>
@@ -393,22 +396,22 @@ const CodeSlotChallenge = ({
             <div style={{
               marginTop: '16px',
               padding: '14px 16px',
-              borderRadius: '10px',
-              background: testResult.isCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-              border: `1px solid ${testResult.isCorrect ? '#10b981' : '#ef4444'}`,
+              borderRadius: '12px',
+              background: testResult.isCorrect ? '#e9f4ec' : '#fbeae7',
+              border: `1.5px solid ${testResult.isCorrect ? '#4f9a63' : '#c25b4a'}`,
               animation: 'popIn 0.3s ease'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 {testResult.isCorrect ? (
-                  <CheckCircle size={18} color="#10b981" />
+                  <CheckCircle size={18} color="#2f6564" />
                 ) : (
-                  <AlertTriangle size={18} color="#ef4444" />
+                  <AlertTriangle size={18} color="#c25b4a" />
                 )}
-                <strong style={{ fontSize: '0.9rem', color: testResult.isCorrect ? '#34d399' : '#f87171' }}>
+                <strong style={{ fontSize: '0.9rem', color: testResult.isCorrect ? '#256038' : '#a83220' }}>
                   {testResult.title}
                 </strong>
               </div>
-              <p style={{ margin: 0, fontSize: '0.8rem', color: '#cbd5e1', lineHeight: '1.45' }}>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: testResult.isCorrect ? '#3d6049' : '#6e2d23', lineHeight: '1.45' }}>
                 {testResult.message}
               </p>
 
@@ -417,14 +420,16 @@ const CodeSlotChallenge = ({
                   {onApplyFix && (
                     <button
                       onClick={onApplyFix}
-                      className="btn"
+                      type="button"
                       style={{
-                        background: '#10b981',
-                        color: '#000',
+                        background: '#2f6564',
+                        color: '#ffffff',
                         fontWeight: 700,
                         fontSize: '0.82rem',
-                        padding: '8px 14px',
-                        borderRadius: '6px',
+                        padding: '8px 16px',
+                        borderRadius: '999px',
+                        border: 'none',
+                        cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px'
@@ -437,15 +442,20 @@ const CodeSlotChallenge = ({
                   {onUnlockNextLevel && (
                     <button
                       onClick={onUnlockNextLevel}
-                      className="btn primary"
+                      type="button"
                       style={{
+                        background: 'linear-gradient(135deg, #FA994F 0%, #c4682c 100%)',
+                        color: '#ffffff',
                         fontWeight: 700,
                         fontSize: '0.82rem',
-                        padding: '8px 14px',
-                        borderRadius: '6px',
+                        padding: '8px 16px',
+                        borderRadius: '999px',
+                        border: 'none',
+                        cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '6px'
+                        gap: '6px',
+                        boxShadow: '0 4px 14px rgba(250, 153, 79, 0.3)'
                       }}
                     >
                       Unlock Level {levelNumber + 1} <ArrowRight size={15} />

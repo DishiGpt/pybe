@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { playSlideTransition, unlockAudio } from '../utils/audio';
 
-const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
+const StorySlider = ({ slides, storyStep, setStoryStep, steps, isLightMode = true }) => {
   const [slideDirection, setSlideDirection] = useState('next');
+  const [activePointIndex, setActivePointIndex] = useState(0);
   const slide = slides[storyStep];
+
+  // Reset active point index when slide changes
+  useEffect(() => {
+    setActivePointIndex(0);
+  }, [storyStep]);
 
   // Only unlock slides up to what the user has reached (at start: scenes 0 & 1; scene 3 unlocks after crash)
   const maxUnlockedStep = Math.max(storyStep, 1);
@@ -43,80 +49,135 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
     }
   };
 
+  // Parse points if text contains structured problem definitions
+  const parseSlidePoints = (text) => {
+    if (!text || !text.includes(';') || !text.includes(':')) return null;
+    const firstColonIdx = text.indexOf(':');
+    const textBeforeColon = text.substring(0, firstColonIdx);
+    const matchBoundary = textBeforeColon.match(/^(.*?[.!?])\s+([^.!?]+)$/s);
+    let intro = '';
+    let pointsBlock = '';
+    if (matchBoundary) {
+      intro = matchBoundary[1].trim();
+      pointsBlock = matchBoundary[2] + text.substring(firstColonIdx);
+    } else {
+      pointsBlock = text;
+    }
+    const rawPoints = pointsBlock.split(';').map(p => p.trim()).filter(Boolean);
+    const points = rawPoints.map(p => {
+      const cIdx = p.indexOf(':');
+      if (cIdx !== -1) {
+        const rawDesc = p.substring(cIdx + 1).trim().replace(/\.$/, '');
+        const desc = rawDesc ? rawDesc.charAt(0).toUpperCase() + rawDesc.slice(1) : '';
+        return {
+          title: p.substring(0, cIdx).trim(),
+          desc: desc
+        };
+      }
+      const rawDesc = p.trim().replace(/\.$/, '');
+      const desc = rawDesc ? rawDesc.charAt(0).toUpperCase() + rawDesc.slice(1) : '';
+      return { title: '', desc: desc };
+    });
+    return { intro, points };
+  };
+
+  const parsed = slide ? parseSlidePoints(slide.text) : null;
+  const hasMultiplePoints = Boolean(parsed && parsed.points.length > 1);
+  const totalPoints = parsed ? parsed.points.length : 0;
+  const isLastPoint = !hasMultiplePoints || activePointIndex >= totalPoints - 1;
+
+  const handleStepForward = () => {
+    if (hasMultiplePoints && !isLastPoint) {
+      setActivePointIndex(prev => prev + 1);
+    } else {
+      handleNext();
+    }
+  };
+
+  const handleStepBackward = () => {
+    if (hasMultiplePoints && activePointIndex > 0) {
+      setActivePointIndex(prev => prev - 1);
+    } else if (hasPrev) {
+      handlePrev();
+    }
+  };
+
+  const canGoBack = hasPrev || (hasMultiplePoints && activePointIndex > 0);
+  const prevButtonLabel = "← Previous";
+  const nextButtonLabel = (hasMultiplePoints && !isLastPoint) ? "Next Problem →" : slide.buttonText;
+
   // Keyboard navigation for arrow keys
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'ArrowLeft' && hasPrev) {
-        handlePrev();
+      if (e.key === 'ArrowLeft' && canGoBack) {
+        handleStepBackward();
       } else if (e.key === 'ArrowRight') {
-        handleNext();
+        handleStepForward();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [hasPrev, currentIndex, validStepIds, slide]);
+  }, [canGoBack, hasMultiplePoints, isLastPoint, activePointIndex]);
 
   if (!slide) return null;
 
-  // Formats text containing bullet/semicolon points into structured cards
-  const renderFormattedText = (text, color) => {
-    if (!text) return null;
+  // Formats text into a clean single problem card (without redundant heading tabs or inner buttons)
+  const renderFormattedText = () => {
+    if (!slide || !slide.text) return null;
 
-    if (text.includes(';') && text.includes(':')) {
-      const firstColonIdx = text.indexOf(':');
-      const textBeforeColon = text.substring(0, firstColonIdx);
-
-      // Look for the end of the intro sentence before the colon (ends with ! or . or ?)
-      const matchBoundary = textBeforeColon.match(/^(.*?[.!?])\s+([^.!?]+)$/s);
-
-      let intro = '';
-      let pointsBlock = '';
-
-      if (matchBoundary) {
-        intro = matchBoundary[1].trim();
-        pointsBlock = matchBoundary[2] + text.substring(firstColonIdx);
-      } else {
-        pointsBlock = text;
-      }
-
-      const rawPoints = pointsBlock.split(';').map(p => p.trim()).filter(Boolean);
-      const points = rawPoints.map(p => {
-        const cIdx = p.indexOf(':');
-        if (cIdx !== -1) {
-          return {
-            title: p.substring(0, cIdx).trim(),
-            desc: p.substring(cIdx + 1).trim().replace(/\.$/, '')
-          };
-        }
-        return { title: '', desc: p.trim().replace(/\.$/, '') };
-      });
+    if (parsed) {
+      const { intro, points } = parsed;
+      const safePointIndex = Math.min(Math.max(0, activePointIndex), points.length - 1);
+      const currentPt = points[safePointIndex] || points[0];
 
       const getIcon = (title) => {
-        const lower = title.toLowerCase();
+        const lower = (title || '').toLowerCase();
         if (lower.includes('memory') || lower.includes('bloat') || lower.includes('leak')) return '💥';
         if (lower.includes('sync') || lower.includes('desync') || lower.includes('ghost')) return '🔄';
         if (lower.includes('cpu') || lower.includes('lag') || lower.includes('stack') || lower.includes('overhead')) return '⏳';
-        if (lower.includes('redundant') || lower.includes('blocked')) return '🛑';
+        if (lower.includes('crash') || lower.includes('oom') || lower.includes('fatal')) return '🛑';
+        if (lower.includes('blocked') || lower.includes('redundant')) return '⛔';
         return '⚠️';
       };
 
       return (
         <div className="slide-formatted-body">
           {intro && <p className="slide-intro-paragraph">{intro}</p>}
-          <div className="slide-points-grid">
-            {points.map((pt, i) => (
-              <div key={i} className="slide-point-card" style={{ borderLeft: `3px solid ${color}` }}>
-                <span className="slide-point-icon">{getIcon(pt.title)}</span>
-                <div className="slide-point-text-block">
-                  {pt.title && (
-                    <strong className="slide-point-title" style={{ color: '#fff' }}>
-                      {pt.title}:
-                    </strong>
-                  )}
-                  <span className="slide-point-desc">{pt.desc}</span>
-                </div>
+
+          {/* Single Focused Issue Card (NO extra 3 headings) */}
+          <div className="slide-single-point-card" key={safePointIndex}>
+            <div className="point-card-header">
+              <div className="point-badge-left">
+                <span className="point-icon-badge">{getIcon(currentPt.title)}</span>
+                <span className="point-counter-pill">
+                  Problem {safePointIndex + 1} of {points.length}
+                </span>
               </div>
-            ))}
+              <div className="point-nav-dots" title={`Problem ${safePointIndex + 1} of ${points.length}`}>
+                {points.map((_, idx) => (
+                  <span
+                    key={idx}
+                    className={`point-nav-dot ${idx === safePointIndex ? 'active' : ''}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* 1. Situation First */}
+            <div className="point-situation-box">
+              <div className="point-situation-label">Situation:</div>
+              <p className="point-situation-desc">
+                {currentPt.desc}
+              </p>
+            </div>
+
+            {/* 2. Then Concept Callout */}
+            {currentPt.title && (
+              <div className="point-concept-callout">
+                <span className="point-concept-prefix">⚡ This is called:</span>
+                <strong className="point-concept-name">{currentPt.title}</strong>
+              </div>
+            )}
           </div>
         </div>
       );
@@ -124,13 +185,13 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
 
     return (
       <p className="slide-default-paragraph">
-        {text}
+        {slide.text}
       </p>
     );
   };
 
   return (
-    <div className="scene-overlay">
+    <div className={`scene-overlay ${isLightMode ? 'level1-light-theme' : ''}`}>
       <div className="scene-slider-wrapper">
         {/* Animated Slide Card with Directional Horizontal Animation */}
         <div
@@ -138,7 +199,9 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
           className={`scene-card-animated ${slideDirection === 'prev' ? 'slide-from-left' : 'slide-from-right'}`}
           style={{
             border: `2px solid ${slide.color}`,
-            boxShadow: `0 0 50px ${slide.color}35, 0 20px 40px rgba(0,0,0,0.6)`
+            boxShadow: isLightMode
+              ? `0 0 35px ${slide.color}20, 0 16px 36px rgba(0,0,0,0.08)`
+              : `0 0 50px ${slide.color}35, 0 20px 40px rgba(0,0,0,0.6)`
           }}
         >
           {/* Top Slide Progress Strip */}
@@ -153,7 +216,7 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
           </div>
 
           {/* Top Story Timeline Tabs / Pills */}
-          <div className="scene-step-bar">
+          <div className="scene-step-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', flexWrap: 'wrap', gap: '8px' }}>
             {steps.map((s) => {
               const isActive = storyStep === s.id;
               const isPast = storyStep > s.id;
@@ -171,15 +234,18 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
                   className="scene-step-pill"
                   style={{
                     background: isActive
-                      ? slide.color
+                      ? (isLightMode ? 'linear-gradient(135deg, #FFBC57, #FA994F)' : slide.color)
                       : isPast
-                        ? 'rgba(255,255,255,0.12)'
-                        : 'rgba(255,255,255,0.04)',
-                    color: isActive ? '#000' : isPast ? '#94a3b8' : '#475569',
+                        ? (isLightMode ? '#ffeeda' : 'rgba(255,255,255,0.12)')
+                        : (isLightMode ? '#fff8f2' : 'rgba(255,255,255,0.04)'),
+                    color: isActive
+                      ? (isLightMode ? '#2e1505' : '#ffffff')
+                      : (isLightMode ? (isPast ? '#2e1505' : '#7c4a2d') : (isPast ? '#94a3b8' : '#475569')),
                     border: isActive
-                      ? `1px solid ${slide.color}`
-                      : '1px solid rgba(255,255,255,0.08)',
-                    boxShadow: isActive ? `0 0 16px ${slide.color}80` : 'none',
+                      ? (isLightMode ? '1px solid #FA994F' : `1px solid ${slide.color}`)
+                      : (isLightMode ? '1px solid rgba(246, 159, 92, 0.28)' : '1px solid rgba(255,255,255,0.08)'),
+                    borderRadius: '999px',
+                    boxShadow: isActive ? (isLightMode ? '0 4px 14px rgba(250, 153, 79, 0.35)' : `0 0 16px ${slide.color}80`) : 'none',
                     cursor: isAvailable ? 'pointer' : 'default',
                     opacity: isAvailable ? 1 : 0.4
                   }}
@@ -194,10 +260,11 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
           <h2
             style={{
               fontSize: '2.5rem',
-              color: slide.color,
+              fontFamily: '"Fraunces", Georgia, serif',
+              color: isLightMode ? '#3b2012' : slide.color,
               marginBottom: '20px',
-              textShadow: `0 0 25px ${slide.color}50`,
-              fontWeight: 800
+              textShadow: isLightMode ? 'none' : `0 0 25px ${slide.color}50`,
+              fontWeight: 600
             }}
           >
             {slide.title}
@@ -208,16 +275,13 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
             {/* Left: Illustrated Concept Art */}
             <div className="slide-image-pane" style={{ flex: '1', display: 'flex', justifyContent: 'center', position: 'relative' }}>
               <div
-                className="scene-image-glow-aura"
-                style={{ background: slide.color }}
-              />
-
-              <div
                 className="scene-image-container"
                 style={{
-                  border: `2px solid ${slide.color}80`,
-                  boxShadow: `0 12px 35px rgba(0,0,0,0.6), 0 0 25px ${slide.color}40`,
-                  background: 'rgba(15, 23, 42, 0.9)'
+                  border: isLightMode ? '1px solid rgba(246, 159, 92, 0.3)' : `2px solid ${slide.color}80`,
+                  boxShadow: isLightMode
+                    ? '0 4px 16px rgba(0, 0, 0, 0.08)'
+                    : '0 12px 35px rgba(0,0,0,0.6)',
+                  background: isLightMode ? '#fffdfa' : 'rgba(15, 23, 42, 0.9)'
                 }}
               >
                 <div className="scene-light-sweep-effect">
@@ -243,9 +307,9 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
                     bottom: '10px',
                     left: '12px',
                     right: '12px',
-                    background: 'rgba(15, 23, 42, 0.92)',
+                    background: isLightMode ? 'rgba(255, 253, 249, 0.95)' : 'rgba(15, 23, 42, 0.92)',
                     backdropFilter: 'blur(8px)',
-                    border: `1px solid ${slide.color}60`,
+                    border: isLightMode ? '1px solid rgba(246, 159, 92, 0.4)' : `1px solid ${slide.color}60`,
                     borderRadius: '8px',
                     padding: '6px 12px',
                     display: 'flex',
@@ -253,7 +317,7 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
                     justifyContent: 'center',
                     gap: '6px',
                     fontSize: '0.82rem',
-                    color: slide.color,
+                    color: isLightMode ? '#7c4a2d' : slide.color,
                     fontWeight: 700,
                     zIndex: 3
                   }}
@@ -267,20 +331,21 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
 
             {/* Right: Narrative Description & Action Flow */}
             <div className="slide-content-pane" style={{ flex: '1.15', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
-              {renderFormattedText(slide.text, slide.color)}
+              {renderFormattedText()}
 
               {/* Slider Bottom Action Controls */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', width: '100%', flexWrap: 'wrap', marginTop: 'auto' }}>
-                {hasPrev && (
+                {canGoBack && (
                   <button
                     className="scene-prev-btn"
-                    onClick={handlePrev}
+                    onClick={handleStepBackward}
                     style={{
                       padding: '12px 22px',
-                      background: 'rgba(255, 255, 255, 0.08)',
-                      border: '1px solid rgba(255, 255, 255, 0.2)',
-                      color: '#cbd5e1',
-                      borderRadius: '10px',
+                      background: isLightMode ? '#f0ece0' : 'rgba(255, 255, 255, 0.08)',
+                      border: isLightMode ? '1px solid #e4dcc8' : '1px solid rgba(255, 255, 255, 0.2)',
+                      color: isLightMode ? '#5b5648' : '#cbd5e1',
+                      borderRadius: '999px',
+                      fontFamily: '"Nunito Sans", sans-serif',
                       fontWeight: 700,
                       cursor: 'pointer',
                       display: 'flex',
@@ -289,16 +354,15 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
                       transition: 'all 0.2s ease'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.16)';
-                      e.currentTarget.style.color = '#fff';
+                      e.currentTarget.style.background = isLightMode ? '#e4dcc8' : 'rgba(255, 255, 255, 0.16)';
+                      e.currentTarget.style.color = isLightMode ? '#2b2b2b' : '#fff';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                      e.currentTarget.style.color = '#cbd5e1';
+                      e.currentTarget.style.background = isLightMode ? '#f0ece0' : 'rgba(255, 255, 255, 0.08)';
+                      e.currentTarget.style.color = isLightMode ? '#5b5648' : '#cbd5e1';
                     }}
                   >
-                    <span>←</span>
-                    <span>Previous</span>
+                    <span>{prevButtonLabel}</span>
                   </button>
                 )}
 
@@ -306,11 +370,13 @@ const StorySlider = ({ slides, storyStep, setStoryStep, steps }) => {
                   className="scene-next-btn"
                   style={{
                     background: slide.color,
+                    borderRadius: '999px',
+                    fontFamily: '"Nunito Sans", sans-serif',
                     boxShadow: `0 8px 24px ${slide.color}60`
                   }}
-                  onClick={handleNext}
+                  onClick={handleStepForward}
                 >
-                  <span>{slide.buttonText}</span>
+                  <span>{nextButtonLabel}</span>
                   <span className="arrow-slide-anim">➔</span>
                 </button>
               </div>

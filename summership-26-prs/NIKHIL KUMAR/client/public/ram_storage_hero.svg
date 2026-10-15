@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="1000" height="650">
+  <defs>
+    <!-- Wall & Room Lighting Gradients -->
+    <linearGradient id="wallBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCFAF5"/>
+      <stop offset="65%" stop-color="#FAF6EE"/>
+      <stop offset="100%" stop-color="#EFE6D8"/>
+    </linearGradient>
+
+    <!-- Honey Oak Wooden Desk Surface -->
+    <linearGradient id="woodSurface" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E5C396"/>
+      <stop offset="15%" stop-color="#DDB583"/>
+      <stop offset="70%" stop-color="#CD9F69"/>
+      <stop offset="100%" stop-color="#BA8952"/>
+    </linearGradient>
+
+    <linearGradient id="woodFrontEdge" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9E6F3A"/>
+      <stop offset="100%" stop-color="#7A5226"/>
+    </linearGradient>
+
+    <!-- Morning Sunlight Stream -->
+    <linearGradient id="sunbeam" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF5D6" stop-opacity="0.6"/>
+      <stop offset="40%" stop-color="#FFEBB0" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#FAF6EE" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Stylized 3D RAM Metal Heatsink Gradients -->
+    <linearGradient id="ramBodyFront" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="25%" stop-color="#F7F3EB"/>
+      <stop offset="70%" stop-color="#E5D9C7"/>
+      <stop offset="100%" stop-color="#D1C0AA"/>
+    </linearGradient>
+
+    <linearGradient id="ramBodyBevel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E8DC handleC9"/>
+      <stop offset="50%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#DDD0BD"/>
+    </linearGradient>
+
+    <linearGradient id="ramSpineGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FA994F"/>
+      <stop offset="45%" stop-color="#FBBF24"/>
+      <stop offset="80%" stop-color="#FA994F"/>
+      <stop offset="100%" stop-color="#E07324"/>
+    </linearGradient>
+
+    <linearGradient id="ramDramChip" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3A332B"/>
+      <stop offset="100%" stop-color="#241E18"/>
+    </linearGradient>
+
+    <linearGradient id="goldPinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCE68A"/>
+      <stop offset="40%" stop-color="#E8B038"/>
+      <stop offset="100%" stop-color="#B8801C"/>
+    </linearGradient>
+
+    <linearGradient id="terracottaPot" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D97232"/>
+      <stop offset="50%" stop-color="#E88242"/>
+      <stop offset="100%" stop-color="#B8581C"/>
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="deskDropShadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="24" stdDeviation="20" flood-color="#4A341E" flood-opacity="0.28"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#4A341E" flood-opacity="0.18"/>
+    </filter>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- ======================================================= -->
+  <!-- 1. WARM SUNLIT ROOM BACKGROUND (LEVEL 1 CLASSROOM VIBE) -->
+  <!-- ======================================================= -->
+  <!-- Back Wall -->
+  <rect x="0" y="0" width="1000" height="340" fill="url(#wallBg)"/>
+
+  <!-- Baseboard Wood Trim -->
+  <rect x="0" y="325" width="1000" height="15" fill="#C2925B"/>
+  <line x1="0" y1="325" x2="1000" y2="325" stroke="#A67843" stroke-width="2"/>
+
+  <!-- Arched Classroom Window Projection on Wall (Sunlight Angle) -->
+  <polygon points="120,0 360,0 280,325 40,325" fill="#FFF8E7" opacity="0.45"/>
+  <polygon points="390,0 630,0 550,325 310,325" fill="#FFF8E7" opacity="0.35"/>
+
+  <!-- ======================================================= -->
+  <!-- 2. HONEY OAK WOODEN WORKBENCH / DESK (FOREGROUND) -->
+  <!-- ======================================================= -->
+  <polygon points="0,340 1000,340 1000,620 0,620" fill="url(#woodSurface)"/>
+
+  <!-- Wood Plank Seams & Organic Grain Highlights -->
+  <line x1="0" y1="410" x2="1000" y2="410" stroke="#C59660" stroke-width="1.5" opacity="0.6"/>
+  <line x1="0" y1="480" x2="1000" y2="480" stroke="#C59660" stroke-width="1.5" opacity="0.6"/>
+  <line x1="0" y1="550" x2="1000" y2="550" stroke="#C59660" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Soft diagonal sunlight spill on desktop -->
+  <polygon points="80,340 450,340 680,620 220,620" fill="url(#sunbeam)"/>
+
+  <!-- Desk Front Beveled Edge -->
+  <rect x="0" y="620" width="1000" height="30" fill="url(#woodFrontEdge)"/>
+  <line x1="0" y1="620" x2="1000" y2="620" stroke="#ECC695" stroke-width="2"/>
+
+  <!-- ======================================================= -->
+  <!-- 3. BACKGROUND PROPS: CUTE SAGE SUCCULENT IN TERRACOTTA POT -->
+  <!-- ======================================================= -->
+  <g transform="translate(850, 260)">
+    <!-- Pot Shadow -->
+    <ellipse cx="40" cy="85" rx="36" ry="10" fill="#3D2916" opacity="0.25"/>
+    
+    <!-- Terracotta Pot -->
+    <polygon points="12,40 68,40 60,82 20,82" fill="url(#terracottaPot)"/>
+    <!-- Rim -->
+    <rect x="8" y="32" width="64" height="10" rx="3" fill="#E88242" stroke="#B8581C" stroke-width="1"/>
+    
+    <!-- Stylized Green Succulent Plant (Pixar Vibe) -->
+    <ellipse cx="40" cy="28" rx="14" ry="18" fill="#2F6564"/>
+    <ellipse cx="26" cy="30" rx="12" ry="16" fill="#3A7D7C" transform="rotate(-25 26 30)"/>
+    <ellipse cx="54" cy="30" rx="12" ry="16" fill="#3A7D7C" transform="rotate(25 54 30)"/>
+    <ellipse cx="40" cy="18" rx="10" ry="14" fill="#4B9695"/>
+    <ellipse cx="40" cy="14" rx="6" ry="10" fill="#67B3B2"/>
+  </g>
+
+  <!-- ======================================================= -->
+  <!-- 4. MAIN HERO: PHYSICAL DDR5 RAM MODULE (HERO OBJECT) -->
+  <!-- Clean, beautiful, 3D stylized, realistic yet friendly -->
+  <!-- ======================================================= -->
+  <g transform="translate(100, 240)">
+    <!-- Ambient & Contact Drop Shadow on Wood Desk -->
+    <ellipse cx="400" cy="275" rx="390" ry="24" fill="#3B2615" opacity="0.28" filter="url(#deskDropShadow)"/>
+    <ellipse cx="400" cy="270" rx="370" ry="12" fill="#28180A" opacity="0.38"/>
+
+    <!-- ============================== -->
+    <!-- RAM PCB & HEATSINK ASSEMBLY   -->
+    <!-- ============================== -->
+    <!-- Extruded 3D Top Depth / Spine Shadow -->
+    <polygon points="20,12 780,12 800,28 0,28" fill="#BFAF9B"/>
+
+    <!-- Top Radiant Terracotta/Amber Lightstrip (The RAM Heat-Spine) -->
+    <rect x="15" y="10" width="770" height="20" rx="8" fill="url(#ramSpineGlow)" filter="url(#softGlow)"/>
+    <!-- Center white core highlight in lightstrip -->
+    <rect x="40" y="14" width="720" height="6" rx="3" fill="#FFFBEB" opacity="0.85"/>
+
+    <!-- Main Front Metal Armor / Heatspreader Body -->
+    <rect x="0" y="26" width="800" height="210" rx="14" fill="url(#ramBodyFront)" stroke="#DDD0BD" stroke-width="2"/>
+
+    <!-- Geometric Pixar-Style Heatsink Chamfers / Grooves -->
+    <!-- Top Chamfer Cut -->
+    <polygon points="0,26 800,26 775,46 25,46" fill="#FFFFFF" opacity="0.9"/>
+    
+    <!-- Stylized Ventilation Slits & Heat Fin Detail -->
+    <g fill="#42392F" opacity="0.8">
+      <rect x="50" y="58" width="6" height="22" rx="3"/>
+      <rect x="66" y="58" width="6" height="22" rx="3"/>
+      <rect x="82" y="58" width="6" height="22" rx="3"/>
+      <rect x="98" y="58" width="6" height="22" rx="3"/>
+
+      <rect x="696" y="58" width="6" height="22" rx="3"/>
+      <rect x="712" y="58" width="6" height="22" rx="3"/>
+      <rect x="728" y="58" width="6" height="22" rx="3"/>
+      <rect x="744" y="58" width="6" height="22" rx="3"/>
+    </g>
+
+    <!-- Stylized Metallic Center Inset Banner -->
+    <rect x="130" y="54" width="540" height="30" rx="6" fill="#F4ECE1" stroke="#E4DCC8" stroke-width="1.5"/>
+    <text x="400" y="74" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="900" fill="#7C4A2D" letter-spacing="3.5">
+      HIGH-SPEED DDR5 • 32 GB 8200 MHz
+    </text>
+
+    <!-- 4 High-Density Stylized DRAM Microchips -->
+    <!-- DRAM Chip 1 -->
+    <g transform="translate(60, 102)">
+      <rect width="140" height="110" rx="6" fill="url(#ramDramChip)" stroke="#5A4E42" stroke-width="1.5"/>
+      <circle cx="16" cy="18" r="3.5" fill="#FA994F"/>
+      <text x="70" y="52" text-anchor="middle" font-family="'Courier New', monospace" font-size="13" font-weight="800" fill="#FFFDF8">DRAM-01</text>
+      <text x="70" y="72" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" font-weight="700" fill="#E5A93C">8 GB • BANK 0</text>
+      <text x="70" y="94" text-anchor="middle" font-family="'Courier New', monospace" font-size="9.5" fill="#88D4D3">0x7FFF00</text>
+    </g>
+
+    <!-- DRAM Chip 2 -->
+    <g transform="translate(230, 102)">
+      <rect width="140" height="110" rx="6" fill="url(#ramDramChip)" stroke="#5A4E42" stroke-width="1.5"/>
+      <circle cx="16" cy="18" r="3.5" fill="#FA994F"/>
+      <text x="70" y="52" text-anchor="middle" font-family="'Courier New', monospace" font-size="13" font-weight="800" fill="#FFFDF8">DRAM-02</text>
+      <text x="70" y="72" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" font-weight="700" fill="#E5A93C">8 GB • BANK 1</text>
+      <text x="70" y="94" text-anchor="middle" font-family="'Courier New', monospace" font-size="9.5" fill="#88D4D3">0x7FFF20</text>
+    </g>
+
+    <!-- DRAM Chip 3 -->
+    <g transform="translate(430, 102)">
+      <rect width="140" height="110" rx="6" fill="url(#ramDramChip)" stroke="#5A4E42" stroke-width="1.5"/>
+      <circle cx="16" cy="18" r="3.5" fill="#FA994F"/>
+      <text x="70" y="52" text-anchor="middle" font-family="'Courier New', monospace" font-size="13" font-weight="800" fill="#FFFDF8">DRAM-03</text>
+      <text x="70" y="72" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" font-weight="700" fill="#E5A93C">8 GB • BANK 2</text>
+      <text x="70" y="94" text-anchor="middle" font-family="'Courier New', monospace" font-size="9.5" fill="#88D4D3">0x7FFF40</text>
+    </g>
+
+    <!-- DRAM Chip 4 -->
+    <g transform="translate(600, 102)">
+      <rect width="140" height="110" rx="6" fill="url(#ramDramChip)" stroke="#5A4E42" stroke-width="1.5"/>
+      <circle cx="16" cy="18" r="3.5" fill="#FA994F"/>
+      <text x="70" y="52" text-anchor="middle" font-family="'Courier New', monospace" font-size="13" font-weight="800" fill="#FFFDF8">DRAM-04</text>
+      <text x="70" y="72" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" font-weight="700" fill="#E5A93C">8 GB • BANK 3</text>
+      <text x="70" y="94" text-anchor="middle" font-family="'Courier New', monospace" font-size="9.5" fill="#88D4D3">0x7FFF60</text>
+    </g>
+
+    <!-- Bottom Gold Contact Edge Pins (DIMM Interface) -->
+    <g transform="translate(20, 236)">
+      <!-- Green/Amber Substrate Edge with Center DIMM Alignment Notch -->
+      <path d="M 0,0 L 360,0 L 365,-8 L 385,-8 L 390,0 L 760,0 L 760,26 L 0,26 Z" fill="#2F6564"/>
+
+      <!-- Golden Pins Array Left Wing -->
+      <g fill="url(#goldPinGrad)">
+        <rect x="8" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="20" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="32" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="44" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="56" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="68" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="80" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="92" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="104" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="116" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="128" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="140" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="152" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="164" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="176" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="188" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="200" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="212" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="224" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="236" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="248" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="260" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="272" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="284" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="296" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="308" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="320" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="332" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="344" y="3" width="6" height="20" rx="1.5"/>
+      </g>
+
+      <!-- Golden Pins Array Right Wing -->
+      <g fill="url(#goldPinGrad)" transform="translate(400, 0)">
+        <rect x="8" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="20" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="32" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="44" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="56" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="68" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="80" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="92" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="104" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="116" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="128" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="140" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="152" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="164" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="176" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="188" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="200" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="212" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="224" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="236" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="248" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="260" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="272" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="284" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="296" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="308" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="320" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="332" y="3" width="6" height="20" rx="1.5"/>
+        <rect x="344" y="3" width="6" height="20" rx="1.5"/>
+      </g>
+    </g>
+  </g>
+</svg>
