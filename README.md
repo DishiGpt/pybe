@@ -1,61 +1,41 @@
-# PyBe MERN App
+# PyBe — Submission by Dishi Gupta
 
-PyBe is a scenario-driven Python learning prototype built from the supplied PRD and breakdown document. It has no login flow for now.
+This folder contains my individual contribution to the PyBe Python learning app.
 
-📚 View the project wiki: [WIKI.md](WIKI.md)
+## Features Implemented
 
-## Features
+### 1. New "Advanced" Difficulty Tier
+Added a fourth difficulty tier — above Beginner, Explorer, and Builder — to house more
+advanced, multi-step learning material.
 
-- Scenario browser with difficulty, concept, and search filters
-- Interactive learning session: learner reasoning, abstraction mapping, conversational prompts, Python construct generation, prompt scoring, and reflection capture
-- Dashboard with progress, prompt maturity, concept mastery, misconceptions, and recent sessions
-- Roadmap view covering V0 through V3 from the source documents
-- JSON-file backed API with seed data
+### 2. Rosewood Manor — Chained Murder-Mystery Case Study
+Built PyBe's first connected, multi-part scenario: a 6-part murder-mystery investigation
+where the learner solves the case while learning progressively harder Python concepts —
+string parsing, datetime handling and sorting, sets, and finally backtracking/recursion.
+Each part is linked to the next via `storyId`, `order`, and `nextScenarioId`, with a
+"Next Case File" flow taking the learner through the story to a final reveal.
 
-## Tech Stack
+### 3. Case Narrative & Detail
+Wrote the full case content: the victim, five suspects with individual motives, household
+witnesses, evidence, and the final solution — so the case is coherent and engaging, not
+just abstract data to sort.
 
-- JSON file storage
-- Express + Node.js
-- React + Vite
-- Plain CSS, no auth
+### 4. Concept-Aware Python Code Generation Fix
+Fixed the Python code generator, which previously ignored each scenario's declared
+concepts and fell back to printing just the scenario title. Code generation is now
+concept-driven, covering all concepts used across the app's scenarios, including
+recursion, backtracking, sets, sorting, and datetime handling.
 
-## Prerequisites
-
-- Node.js 18+
-
-## Setup
-
-1. Install dependencies:
+## How to Run
 
 ```bash
 npm run installAll
-```
-
-2. Configure the server environment:
-
-```bash
 cp server/.env.example server/.env
-```
-
-The default values work for local development.
-
-3. Seed sample data:
-
-```bash
 npm run seed
-```
-
-4. Run the app:
-
-```bash
 npm run dev
 ```
 
 - Frontend: http://localhost:5173
 - API: http://localhost:5000/api
 
-## Notes
-
-The AI behavior in this prototype is deterministic and local. The abstraction mapper, prompt evaluator, and Python construct generator use rule-based logic so you can run everything without external AI keys. Later phases can replace those services with OpenAI, RAG, or TinyLLM components.
-
-Learning data is stored in `server/src/data/db.json`. This keeps the prototype simple and fully local, without MongoDB, Docker, Atlas, or any external database.
+Seed data contains one chained scenario: the six-part Rosewood Manor case. Each part is delivered as short slides and every learner response is multiple-choice.

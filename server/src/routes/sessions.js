@@ -20,7 +20,9 @@ router.post('/', async (req, res, next) => {
 
     const abstractionMap = engine.mapReasoning(req.body.reasoning);
     const generatedCode = engine.generateCode(scenario, abstractionMap);
+    const attempts = Math.max(1, Number(req.body.attempts) || 1);
     const prompt = engine.evaluatePrompt(req.body.promptText);
+    prompt.score = Math.max(0, prompt.score - ((attempts - 1) * 10));
     const session = await store.addSession({
       learnerName: req.body.learnerName || 'Guest learner',
       scenario: scenario._id,
@@ -30,6 +32,7 @@ router.post('/', async (req, res, next) => {
       generatedCode,
       codeExplanation: engine.explainCode(abstractionMap),
       promptScore: prompt.score,
+      attempts,
       promptFeedback: prompt.feedback,
       reflection: req.body.reflection || '',
       misconceptions: engine.detectMisconceptions(req.body.reasoning),

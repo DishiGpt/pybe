@@ -37,6 +37,13 @@ const conceptRules = [
   }
 ];
 
+function commentCode(code) {
+  return String(code || '').split('\n').map((line) => {
+    if (!line.trim() || line.trim().startsWith('#')) return line;
+    return `${line}  # PyBe: this line advances the example.`;
+  }).join('\n');
+}
+
 function mapReasoning(reasoning = '') {
   const lower = reasoning.toLowerCase();
   const matches = conceptRules.filter((rule) => rule.keywords.some((keyword) => lower.includes(keyword)));
@@ -51,7 +58,7 @@ function mapReasoning(reasoning = '') {
 // Rosewood Manor story. Generation is driven by the scenario's declared
 // `concepts` so the learner always sees code that matches the scenario, instead
 // of a generic fallback derived only from keyword-matching their reasoning text.
-const conceptCodeTemplates = {
+const rawConceptCodeTemplates = {
   variables: `bag_weight = 4.5\nprint(f"The bag weighs {bag_weight} kg")`,
   arithmetic: `samosa = 15\njuice = 20\ntotal = samosa + juice\nprint(f"Total cost: {total}")`,
   subtraction: `pocket_money = 100\nspent = 35\nremaining = pocket_money - spent\nprint(f"Money left: {remaining}")`,
@@ -84,6 +91,10 @@ const conceptCodeTemplates = {
   backtracking: `def place(queens, n):\n    row = len(queens)\n    if row == n:\n        return queens\n    for col in range(n):\n        if all(col != c and abs(col - c) != row - r for r, c in enumerate(queens)):\n            result = place(queens + [col], n)\n            if result:\n                return result\n    return None\n\nprint(place([], 4))`,
   reflection: `decisive_clue = "the blue coat seen at 8:10 pm"\nsolution = {"suspect": "Iris", "room": "study", "time": "8:05 pm"}\nprint(f"The case turned on {decisive_clue}.")\nprint(f"Backtracking kept only the assignment that fit every clue: {solution}")`
 };
+
+const conceptCodeTemplates = Object.fromEntries(
+  Object.entries(rawConceptCodeTemplates).map(([name, code]) => [name, commentCode(code)])
+);
 
 // Legacy heuristic: infer code purely from how the learner's reasoning mapped.
 // Retained as a safety net for scenarios that declare no known concept.
@@ -154,4 +165,4 @@ function masterySignals(maps, promptScore) {
   return signals;
 }
 
-module.exports = { mapReasoning, generateCode, explainCode, evaluatePrompt, detectMisconceptions, masterySignals };
+module.exports = { mapReasoning, generateCode, explainCode, evaluatePrompt, detectMisconceptions, masterySignals, conceptCodeTemplates };

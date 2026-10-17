@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "installAll": "npm install --prefix server && npm install --prefix client",
+    "audit:colors": "node server/scripts/audit-colors.js",
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "seed": "npm run seed --prefix server",
+    "smoke": "node scripts/smoke.js",
     "start": "npm run start --prefix server"
   },
   "dependencies": {

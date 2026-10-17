@@ -12,9 +12,9 @@ The project is designed to demonstrate a proof-of-concept for a Python learning 
 - Provides a roadmap of learning goals from V0 through V3
 
 ## Main Features
-- Scenario browser with difficulty, concept, and search filters
-- Interactive learning sessions with conversational prompts
-- Reasoning support, abstraction mapping, prompt scoring, and reflection capture
+- Rosewood Manor's six-part slide-based case
+- Multiple-choice reasoning, mapping, mentor-prompt, and reflection checks
+- Deterministic prompt scoring and concept mastery from local attempts
 - Dashboard with progress, prompt maturity, concept mastery, and misconceptions
 - Roadmap visualization for staged product development
 - Local JSON file storage with seedable sample data
@@ -54,9 +54,9 @@ Visit:
 - API: http://localhost:5000/api
 
 ## How It Works
-- The frontend loads scenarios, session data, and roadmap details from the backend API.
+- The frontend loads the six chained case parts, session data, and roadmap details from the backend API.
 - The backend serves static JSON-based data and handles session/analytics routes.
-- Learning interactions are powered by deterministic local logic rather than external AI calls.
+- Learning interactions are short slides powered by deterministic local logic rather than external AI calls.
 
 ## Project Structure
 - `client/` - React application source

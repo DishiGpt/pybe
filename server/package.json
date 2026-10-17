@@ -5,7 +5,12 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "seed": "node src/seed.js"
+    "seed": "node src/seed.js",
+    "audit:text": "node scripts/audit-text.js",
+    "audit:answers": "node scripts/audit-answers.js",
+    "audit:story": "node scripts/audit-story.js",
+    "check:contrast": "node scripts/contrast-check.js",
+    "validate:python": "node scripts/validate-python.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
