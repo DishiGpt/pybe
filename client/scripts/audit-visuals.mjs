@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 
 const baseUrl = process.env.PYBE_URL || 'http://localhost:5173/';
-const sizes = [{ name: 'desktop', width: 1280, height: 900 }, { name: 'mobile', width: 360, height: 800 }];
+const sizes = [{ name: 'desktop', width: 1280, height: 900 }, { name: 'mobile', width: 390, height: 844 }];
 const themes = ['light', 'dark'];
 const allowList = ['.code-block', '.code-block *', '.cleared-stamp'];
 

@@ -3,7 +3,22 @@ const pairs = [
   ['dark secondary text', '#b5a888', '#0f0d0a'],
   ['light body text', '#1d1811', '#f1e4c8'],
   ['light secondary text', '#594b37', '#f1e4c8'],
-  ['code text', '#ddd3ba', '#0b0908']
+  ['code text', '#ddd3ba', '#0b0908'],
+  ['dark code panel code text', '#e8ddc3', '#171410'],
+  ['dark code panel expl text', '#f0e6d2', '#171410'],
+  ['light code panel code text', '#201b13', '#e5dac1'],
+  ['light code panel expl text', '#18140e', '#e5dac1'],
+  // Scrim captions over image (1280px desktop & 390px mobile, dark and light themes)
+  // Worst-case blended scrim background: dark scrim (88% #0f0d0a) over pure white image (#2c2a27), and dark image (#0f0d0a)
+  ['dark scrim caption title (worst-case over light image)', '#fff9eb', '#2c2a27'],
+  ['dark scrim caption detail (worst-case over light image)', '#e3b94d', '#2c2a27'],
+  ['dark scrim caption title (over dark image)', '#fff9eb', '#0f0d0a'],
+  ['dark scrim caption detail (over dark image)', '#e3b94d', '#0f0d0a'],
+  // Worst-case blended scrim background: light scrim (94% #fff9eb) over pure black image (#f0eae1), and light image (#fff9eb)
+  ['light scrim caption title (worst-case over dark image)', '#1d1811', '#f0eae1'],
+  ['light scrim caption detail (worst-case over dark image)', '#6d4a0e', '#f0eae1'],
+  ['light scrim caption title (over light image)', '#1d1811', '#fff9eb'],
+  ['light scrim caption detail (over light image)', '#6d4a0e', '#fff9eb']
 ];
 
 function channel(hex) {
@@ -23,4 +38,5 @@ for (const [label, foreground, background] of pairs) {
   if (value < 4.5) failed = true;
 }
 if (failed) { console.error('Contrast check failed: normal text must reach 4.5:1.'); process.exit(1); }
-console.log('Contrast check passed: all checked normal-text pairs meet WCAG AA.');
+console.log('Contrast check passed: all checked normal-text pairs meet WCAG AA (>= 4.5:1).');
+

@@ -20,7 +20,12 @@ export function Scene({ partIndex = 0 }) {
   const scene = scenes[partIndex] || scenes[0];
   return <figure className={`scene scene-${scene.sky}`}>
     <img src={manorAsset} alt="Rosewood Manor" width="448" height="252" loading={partIndex === 0 ? 'eager' : 'lazy'} />
-    <figcaption><strong>{scene.title}</strong><span>{scene.detail}</span></figcaption>
+    <figcaption className="scene-caption">
+      <div className="scene-scrim">
+        <strong className="scene-title">{scene.title}</strong>
+        <span className="scene-detail">{scene.detail}</span>
+      </div>
+    </figcaption>
   </figure>;
 }
 

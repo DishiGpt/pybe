@@ -24,7 +24,7 @@
 //   add a new chained scenario object with the same sub-step shape.
 function commentCode(code) {
   return String(code || '').split('\n').map((line) => {
-    if (!line.trim() || line.trim().startsWith('#')) return line;
+    if (!line.trim() || line.includes('#')) return line;
     const text = line.trim();
     let explanation = 'This line continues the case solution.';
     if (text.startsWith('def ')) explanation = 'This line defines a reusable Python function.';
@@ -169,8 +169,45 @@ function buildSlides(part, index) {
     });
     slides.push({ id: slideId, kind: 'question', questionType: question.type, title: 'Your next move', soFar: copy.soFar, connectsTo: copy.connectsTo, prompt: copy.prompt, choices: shuffleChoices(choices, slideId, index * 4 + questionIndex) });
   });
+  if (index >= 1 && index <= 4) {
+    slides.push({
+      id: `${part._id}-closed`,
+      kind: 'code-reveal',
+      isCodeReveal: true,
+      title: 'Case file closed',
+      storyRecap: [
+        'You opened each messy note at the seam to separate speaker and clue.',
+        'You normalized mixed clock formats and lined up the night in order.',
+        'You compared claimed rooms with witnessed rooms to expose the alibi gaps.',
+        'You tested each room arrangement and backtracked the moment a clue broke.'
+      ][index - 1],
+      conceptName: [
+        'String parsing',
+        'Datetimes & sorting',
+        'Sets & set difference',
+        'Recursion & backtracking'
+      ][index - 1],
+      analogy: [
+        'Like finding the seam on an envelope to open it cleanly.',
+        'Like synchronizing watches before setting off on a schedule.',
+        'Like checking two guest books to see who never arrived.',
+        'Like trying keys in a lock and putting back the ones that stick.'
+      ][index - 1],
+      code: part.idealSolution
+    });
+  }
   if (index === 5) slides.push({ id: `${part._id}-reveal`, kind: 'reveal', title: 'The reveal', text: 'Iris used the slow clock and thread; blue coat marks her exit.' });
-  if (index === 5) slides.push({ id: `${part._id}-debrief`, kind: 'debrief', title: 'How you cracked it', cards: caseParts.slice(1, 5).map((item, cardIndex) => ({ name: item.concepts[0], recap: ['You opened each messy note.', 'You put the night in order.', 'You compared claims with sightings.', 'You tried choices and undid breaks.'][cardIndex], analogy: ['Like labeling a drawer.', 'Like lining up clocks.', 'Like checking two guest books.', 'Like trying keys in a lock.'][cardIndex], code: commentCode(item.idealSolution) })) });
+  if (index === 5) slides.push({
+    id: `${part._id}-debrief`,
+    kind: 'debrief',
+    title: 'How you cracked it',
+    recapRows: [
+      { partId: 'rosewood-part-1', title: 'The Messy Notes', conceptName: 'String parsing' },
+      { partId: 'rosewood-part-2', title: 'What Happened When', conceptName: 'Datetimes & sorting' },
+      { partId: 'rosewood-part-3', title: 'Stories That Don\'t Match', conceptName: 'Sets & set difference' },
+      { partId: 'rosewood-part-4', title: 'Narrowing It Down', conceptName: 'Recursion & backtracking' }
+    ]
+  });
   return slides;
 }
 
@@ -189,7 +226,7 @@ const caseParts = [
     objectives: ['Notice the suspects and setting', 'Treat the case as a sequence of clues', 'Prepare to work step by logical step'],
     sampleReasoning: 'I would start by listing the suspects, the rooms, and the important clues so the detective can examine the facts in order.',
     effectivenessScore: 99,
-    idealSolution: `def gather_case():\n    """Collect the suspects, rooms, and clues before any deduction begins."""\n    suspects = ["Mina", "Dev", "Iris", "Ronan", "Pia"]\n    rooms = ["study", "library", "conservatory", "music room", "gallery"]\n    clues = []\n    return {"suspects": suspects, "rooms": rooms, "clues": []}\n\nprint(gather_case())`,
+    idealSolution: `# Gather the known people and places\ndef gather_facts():  # Collect suspects and rooms\n    suspects = [  # List of five suspects\n        "Mina", "Dev", "Iris", "Ronan", "Pia"  # Names\n    ]  # Close suspect list\n    rooms = ["study", "library", "hall"]  # Key rooms\n    return {"suspects": suspects, "rooms": rooms}  # Facts\n\n# Inspect the initial case details\ncase_board = gather_facts()  # Build starting facts\ncount = len(case_board["suspects"])  # Count suspects\nprint("Suspect count:", count)  # Output total`,
     subSteps: [
       {
         id: 'p0-s1',
@@ -244,7 +281,7 @@ const caseParts = [
     objectives: ['Split one statement into fields', 'Trim extra punctuation and spaces', 'Store each clue in a structured record'],
     sampleReasoning: 'I would split each line into speaker, time, and clue so the statements are easy to compare later.',
     effectivenessScore: 98,
-    idealSolution: `def parse_statement(line):\n    """Turn one messy witness line into a clean speaker/clue record."""\n    normalized = line.replace(" - ", ": ", 1)\n    speaker, _, quote = normalized.partition(":")\n    return {"speaker": speaker.strip(), "clue": quote.strip().strip("'\\"")}\n\nstatements = [\n    "Mrs. Vale: 'At 8:05 pm I heard glass break by the study door.'",\n    "Tom the gardener - 'Someone in a blue coat moved past the rose arch around 8.10 PM.'",\n]\nfor line in statements:\n    print(parse_statement(line))`,
+    idealSolution: `# Cut each note at the speaker mark\ndef parse_statement(note):  # Clean one statement line\n    clean = note.replace(" - ", ": ", 1)  # Fix dash mark\n    speaker, _, quote = clean.partition(":")  # Split at colon\n    clue = quote.strip().strip("'\\"")  # Strip outer quotes\n    res = {"speaker": speaker.strip()}  # Speaker record\n    res["clue"] = clue  # Add clue field\n    return res  # Return clean record\n\n# Test the cleaner on witness notes\nwitness_notes = [  # List of raw witness statements\n    "Mrs. Vale: 'Glass broke at 8:05 pm.'",  # Note 1\n    "Tom - 'Blue coat at rose arch at 8:10.'",  # Note 2\n]  # Close statement list\nfor note in witness_notes:  # Step through every note\n    print(parse_statement(note))  # Print structured record`,
     caseData: {
       witnessStatements: [
         "Mrs. Vale: 'Glass broke by the study at 8:05 pm.'",
@@ -308,7 +345,7 @@ const caseParts = [
     objectives: ['Normalize time text', 'Convert each value to the same comparable format', 'Sort the timeline in order'],
     sampleReasoning: 'I would turn every time into one standard datetime value first, then sort the events by time.',
     effectivenessScore: 97,
-    idealSolution: `from datetime import datetime\n\ndef sort_timeline(raw_times):\n    """Normalize mixed time formats to datetimes and return them in order."""\n    def normalize(text):\n        text = text.replace(".", ":").upper().replace(" ", "")\n        return datetime.strptime(text, "%I:%M%p")\n    return sorted(raw_times, key=normalize)\n\nprint(sort_timeline(["8:12 pm", "8:05 pm", "8.10 PM"]))`,
+    idealSolution: `# Import the clock parser tool\nfrom datetime import datetime  # Tool to parse time text\n\n# Normalize and sort the times\ndef sort_timeline(times):  # Order events chronologically\n    def to_clock(text):  # Standardize single time string\n        clean = text.replace(".", ":")  # Change dot to colon\n        clean = clean.upper().replace(" ", "")  # Strip space\n        return datetime.strptime(clean, "%I:%M%p")  # Datetime\n    return sorted(times, key=to_clock)  # Sort by clock order\n\n# Replay the evening in sequence\nstudy_clock = ["8:12 pm", "8:05 pm", "8.10 PM"]  # Statements\nprint(sort_timeline(study_clock))  # Display sorted times`,
     subSteps: [
       {
         id: 'p2-s1',
@@ -373,7 +410,7 @@ const caseParts = [
     objectives: ['Build two sets of evidence', 'Find overlap and difference', 'Spot which claim cannot be true'],
     sampleReasoning: 'I would compare the claimed rooms with the witnessed rooms and flag any room that appears in one set but not the other.',
     effectivenessScore: 96,
-    idealSolution: `def unverified_rooms(witnessed, claimed):\n    """Return claimed rooms that no witness ever placed anyone in."""\n    return sorted(set(claimed) - set(witnessed))\n\nwitnessed = ["study", "front hall", "library"]\nclaimed = ["conservatory", "kitchen", "library", "front hall", "study", "music room", "gallery"]\nprint(unverified_rooms(witnessed, claimed))`,
+    idealSolution: `# Find claims without witness support\ndef unverified_rooms(seen, claimed):  # Locate alibi gaps\n    unseen = set(claimed) - set(seen)  # Subtract seen rooms\n    return sorted(unseen)  # Return missing rooms in order\n\n# Compare the manor room lists\nwitnessed = ["study", "front hall", "library"]  # Seen rooms\nclaimed = [  # All rooms claimed by suspects\n    "conservatory", "kitchen", "library",  # First set\n    "front hall", "study", "gallery"  # Second set\n]  # Close claimed list\nprint(unverified_rooms(witnessed, claimed))  # Print gaps`,
     caseData: {
       suspectClaims: [
         { suspect: 'Mina', claim: 'I was in the conservatory and kitchen after 8:00.' },
@@ -442,7 +479,7 @@ const caseParts = [
     objectives: ['Model the constraints', 'Try one option at a time', 'Undo bad choices when a path fails'],
     sampleReasoning: 'I would choose one suspect-room-weapon-time combination, check every clue, and backtrack as soon as a choice breaks a rule.',
     effectivenessScore: 95,
-    idealSolution: `def respects_clues(candidate, assignments):\n    """Reject a candidate assignment the moment it breaks a known clue."""\n    # The rope was left in the conservatory, so it is never the study weapon.\n    if candidate["room"] == "study" and candidate.get("weapon") == "rope":\n        return False\n    return True\n\ndef solve(assignments, suspects, rooms):\n    """Assign each suspect a unique room, backtracking whenever a clue fails."""\n    if not suspects:\n        return assignments\n    suspect = suspects[0]\n    for room in rooms:\n        candidate = {"suspect": suspect, "room": room}\n        if not respects_clues(candidate, assignments):\n            continue\n        assignments.append(candidate)\n        result = solve(assignments, suspects[1:], rooms - {room})\n        if result:\n            return result\n        assignments.pop()\n    return None\n\nprint(solve([], ["Mina", "Dev", "Iris"], {"study", "library", "conservatory"}))`,
+    idealSolution: `# Check if room fits the clues\ndef fits_clues(suspect, room):  # Check known clue rules\n    if room == "study" and suspect == "Ronan":  # Rule check\n        return False  # Ronan was seen outside study\n    return True  # Room is consistent with clues\n\n# Try rooms and backtrack on breaks\ndef solve(suspects, rooms, plan):  # Recursive assignment\n    if not suspects:  # When every suspect has a room\n        return plan  # Return consistent assignment\n    suspect = suspects[0]  # Take the next suspect\n    for room in rooms:  # Test each remaining room\n        if fits_clues(suspect, room):  # If clues allow\n            plan[suspect] = room  # Tentatively place suspect\n            rem = rooms - {room}  # Remaining room options\n            res = solve(suspects[1:], rem, plan)  # Recurse\n            if res:  # If valid path found\n                return res  # Return solved arrangement\n            plan.pop(suspect)  # Backtrack failed placement\n    return None  # No valid combination found\n\n# Run the solver for the suspects\nsuspect_list = ["Mina", "Dev", "Iris"]  # Suspect list\nroom_pool = {"study", "library", "hall"}  # Open rooms\nprint(solve(suspect_list, room_pool, {}))  # Output match`,
     starterCode: "def solve(assignments, remaining_suspects, remaining_rooms, remaining_weapons, remaining_times):\n    if len(assignments) == 5:\n        return assignments\n\n    for suspect in list(remaining_suspects):\n        for room in list(remaining_rooms):\n            for weapon in list(remaining_weapons):\n                for time in list(remaining_times):\n                    candidate = {\n                        'suspect': suspect,\n                        'room': room,\n                        'weapon': weapon,\n                        'time': time,\n                    }\n\n                    if not respects_clues(candidate, assignments):\n                        continue\n\n                    assignments.append(candidate)\n                    result = solve(\n                        assignments,\n                        remaining_suspects - {suspect},\n                        remaining_rooms - {room},\n                        remaining_weapons - {weapon},\n                        remaining_times - {time},\n                    )\n                    if result:\n                        return result\n                    assignments.pop()\n\n    return None",
     caseData: {
       grid: {
@@ -525,7 +562,7 @@ const caseParts = [
     objectives: ['Restate the decisive clue', 'Connect the clue to the final solution', 'Reflect on the value of orderly reasoning'],
     sampleReasoning: 'The case turned on the blue coat witness and the study timing. The recursive search worked because it rejected any assignment that broke a clue and kept only the path that fit all of them.',
     effectivenessScore: 94,
-    idealSolution: `def summarize_case(decisive_clue, solution):\n    """Restate the clue that proved the case and why orderly search stayed honest."""\n    return (\n        f"The case turned on {decisive_clue}. "\n        f"The recursive search rejected every assignment that broke a clue, "\n        f"leaving only {solution}."\n    )\n\nprint(summarize_case(\n    "the blue coat seen at 8:10 pm",\n    {"suspect": "Iris", "room": "study", "time": "8:05 pm"},\n))`,
+    idealSolution: `# Format the decisive case finding\ndef summarize_case(clue, guilty):  # Case conclusion summary\n    return f"Guilty: {guilty}. Key clue: {clue}"  # Summary\n\n# Output the final case deduction\nproof = "blue coat at 8:10 pm"  # Decisive clue sighting\nprint(summarize_case(proof, "Iris Vale"))  # Final reveal`,
     reveal: `The corrected clock puts Iris Vale in the study at 8:05. She used the service door and a hidden curtain thread to pull the locked door shut after leaving. Tom's blue coat sighting at 8:10, Mrs. Vale's protective lie, the missing corrected will, and Alden's threat all point to Iris. The room looked impossible only because its clock and exit were misread.`,
     subSteps: [
       {

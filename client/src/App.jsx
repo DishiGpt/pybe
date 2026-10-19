@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { api } from './lib/api';
-import { loadProgress, saveProgress, resetProgress } from './lib/progress';
+import { loadProgress, saveProgress, resetProgress, markRevealSeen } from './lib/progress';
 import LightningBackground from './components/LightningBackground';
 import Onboarding from './components/Onboarding';
 import TopBar from './components/TopBar';
@@ -8,6 +8,7 @@ import Sidebar from './components/Sidebar';
 import CaseContent from './components/CaseContent';
 import LedgerDrawer from './components/LedgerDrawer';
 import SuspectBoard from './components/SuspectBoard';
+import CodeModal from './components/CodeModal';
 import { computeBoard, scoreHistory } from './lib/leaderboard.mjs';
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
   const [results, setResults] = useState({}); // scenarioId -> latest mentor output (in-memory)
   const [submitting, setSubmitting] = useState(false);
   const [ledgerOpen, setLedgerOpen] = useState(false);
+  const [inspectingPart, setInspectingPart] = useState(null);
   const [theme, setTheme] = useState(() => document.documentElement.dataset.theme || 'dark');
   const contentRef = useRef(null);
 
@@ -77,6 +79,34 @@ export default function App() {
     () => stories.find((story) => story.parts.some((part) => part._id === activePartId)) || null,
     [stories, activePartId]
   );
+
+  const activeStepIndex = Math.max(0, progress?.subStepIndex?.[activePartId] || 0);
+
+  // Track seen reveals in localStorage so reload neither replays nor skips them
+  useEffect(() => {
+    const currentSlide = activePart?.slides?.[activeStepIndex];
+    if (activePartId && currentSlide && (currentSlide.isCodeReveal || currentSlide.kind === 'code-reveal')) {
+      markRevealSeen(activePartId);
+      const nowIso = new Date().toISOString();
+      const alreadyCompleted = progress.completedParts?.includes(activePartId);
+      const updatedCompletedParts = alreadyCompleted
+        ? progress.completedParts
+        : [...(progress.completedParts || []), activePartId];
+      const updatedCompletedAt = {
+        ...(progress.completedAt || {}),
+        [activePartId]: progress.completedAt?.[activePartId] || nowIso
+      };
+      const needsUpdate = !progress.seenReveals?.includes(activePartId) || !alreadyCompleted;
+      if (needsUpdate) {
+        updateProgress({
+          seenReveals: [...new Set([...(progress.seenReveals || []), activePartId])],
+          completedParts: updatedCompletedParts,
+          completedAt: updatedCompletedAt
+        });
+      }
+    }
+  }, [activePartId, activeStepIndex, activePart?.slides, progress.completedParts, progress.seenReveals, progress.completedAt]);
+
 
   function selectPart(part) {
     setActivePartId(part._id);
@@ -142,10 +172,15 @@ export default function App() {
 
   function sealPart() {
     if (!activePart) return;
+    const nowIso = new Date().toISOString();
     const alreadySealed = progress.completedParts.includes(activePart._id);
     const completedParts = alreadySealed
       ? progress.completedParts
       : [...progress.completedParts, activePart._id];
+    const completedAt = {
+      ...(progress.completedAt || {}),
+      [activePart._id]: progress.completedAt?.[activePart._id] || nowIso
+    };
 
     const nextPart = activePart.nextScenarioId
       ? scenarios.find((scenario) => scenario._id === activePart.nextScenarioId)
@@ -154,10 +189,12 @@ export default function App() {
     if (nextPart) {
       updateProgress({
         completedParts,
+        completedAt,
         currentPartId: nextPart._id,
         subStepIndex: { ...(progress?.subStepIndex || {}), [nextPart._id]: 0 }
       });
       setActivePartId(nextPart._id);
+
     } else {
       const solved = {
         ...resetProgress(),
@@ -176,6 +213,19 @@ export default function App() {
     contentRef.current?.scrollTo({ top: 0 });
   }
 
+  function handleViewCode(partOrId) {
+    if (!partOrId) return;
+    let target = null;
+    if (typeof partOrId === 'string') {
+      target = scenarios.find((s) => s._id === partOrId);
+    } else if (typeof partOrId === 'object') {
+      target = partOrId;
+    }
+    if (target) {
+      setInspectingPart(target);
+    }
+  }
+
   function finishOnboarding() {
     const firstPart = stories[0]?.parts[0] || scenarios[0];
     updateProgress({
@@ -192,6 +242,7 @@ export default function App() {
     saveProgress(fresh);
     setResults({});
     setLedgerOpen(false);
+    setInspectingPart(null);
     setActivePartId(null);
     setProgress(fresh);
     setPhase('onboarding');
@@ -228,7 +279,6 @@ export default function App() {
     );
   }
 
-  const activeStepIndex = Math.max(0, progress?.subStepIndex?.[activePartId] || 0);
   const partTotal = activeStory ? activeStory.parts.length : 1;
   const partIndex = activeStory ? activeStory.parts.findIndex((part) => part._id === activePartId) : 0;
   const decoratedScenario = activePart
@@ -268,6 +318,7 @@ export default function App() {
           activePartId={activePartId}
           completedParts={progress.completedParts}
           onSelectPart={selectPart}
+          onViewCode={handleViewCode}
         />
 
         <main className="center-zone" ref={contentRef}>
@@ -291,6 +342,7 @@ export default function App() {
               clueTrail={allEvents}
               unlockedClues={unlockedClues}
               clueTotal={allEvents.length}
+              onViewCode={handleViewCode}
             />
           ) : (
             <p className="archive-empty">Choose a file from the archive.</p>
@@ -299,7 +351,20 @@ export default function App() {
         <SuspectBoard board={board} />
       </div>
 
-      <LedgerDrawer open={ledgerOpen} onClose={() => setLedgerOpen(false)} onReset={restartJourney} />
+      <LedgerDrawer
+        open={ledgerOpen}
+        onClose={() => setLedgerOpen(false)}
+        onReset={restartJourney}
+        completedParts={progress.completedParts}
+        completedAt={progress.completedAt}
+        scenarios={scenarios}
+      />
+      {inspectingPart && (
+        <CodeModal
+          part={inspectingPart}
+          onClose={() => setInspectingPart(null)}
+        />
+      )}
     </div>
   );
 }

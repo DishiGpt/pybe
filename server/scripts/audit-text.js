@@ -30,8 +30,8 @@ function addText(part, slide, value, location, kind) {
 
 caseParts.forEach((part) => {
   (part.slides || []).forEach((slide) => {
-    // The debrief is the deliberate exception: it names the ideas after the reveal.
-    if (slide.kind === 'debrief') return;
+    // Concept names and jargon are allowed only on reveal screens, compact final recap (debrief), and code blocks.
+    if (slide.kind === 'debrief' || slide.isCodeReveal || slide.kind === 'code-reveal') return;
     addText(part, slide, slide.title, `${part._id}/${slide.id}/title`, slide.kind);
     addText(part, slide, slide.kind === 'question' ? slide.prompt : slide.text, `${part._id}/${slide.id}`, slide.kind);
     if (slide.kind === 'question') {
